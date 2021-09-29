@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.Manifest
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.*
@@ -31,6 +32,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+
+       // binding.teeth.setColorFilter(Color.parseColor("#FFFFFF"))
+        binding.gallery.setColorFilter(Color.parseColor("#C3C0C0"))
+        binding.backgroundCircle.setColorFilter(Color.parseColor("#F98484"))
+        //window.navigationBarColor = Color.parseColor("#A3F799")
 
         if (allPermissionsGranted()) {
             startCamera()
