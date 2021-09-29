@@ -8,6 +8,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AugusTooth"
 include ':app'
-include ':data'
 include ':presentation'
 include ':domain'
+include ':data'
