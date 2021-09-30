@@ -8,9 +8,13 @@ import android.net.Uri
 import android.Manifest
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.core.impl.PreviewConfig
@@ -30,19 +34,20 @@ import kotlin.math.min
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private var lensFacing = CameraSelector.LENS_FACING_BACK
     private val TAG = "로그"
+    private val OPEN_GALLERY = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.activity = this
-       // binding.teeth.setColorFilter(Color.parseColor("#FFFFFF"))
-        binding.gallery.setColorFilter(Color.parseColor("#C3C0C0"))
+        // binding.teeth.setColorFilter(Color.parseColor("#FFFFFF"))
+        // binding.gallery.setColorFilter(Color.parseColor("#C3C0C0"))
         binding.backgroundCircle.setColorFilter(Color.parseColor("#F98484"))
         //window.navigationBarColor = Color.parseColor("#A3F799")
 
@@ -50,7 +55,8 @@ class MainActivity : AppCompatActivity() {
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
         }
 
         outputDirectory = getOutputDirectory()
@@ -62,36 +68,44 @@ class MainActivity : AppCompatActivity() {
     //권한승인 요청 or 권한확인
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray) {
+        IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     "권한을 반드시 승인해야 합니다",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
             }
         }
     }
 
     //사진 버튼 클릭
-     fun takePhoto(view : View) {
+    fun takePhoto(view: View) {
         val imageCapture = imageCapture ?: return
 
         val photoFile = File(
             outputDirectory,
-            SimpleDateFormat(FILENAME_FORMAT, Locale.KOREA
-            ).format(System.currentTimeMillis()) + ".jpg")
+            SimpleDateFormat(
+                FILENAME_FORMAT, Locale.KOREA
+            ).format(System.currentTimeMillis()) + ".jpg"
+        )
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture.takePicture(
-            outputOptions, ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageSavedCallback {
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
+
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val mediaScanIntent: Intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
                     val contentUri: Uri = Uri.fromFile(photoFile)
@@ -103,13 +117,22 @@ class MainActivity : AppCompatActivity() {
 
     //전면, 후면 카메라 전환
     fun changeCamera(view: View) {
-        Log.d(TAG,"눌림")
+        Log.d(TAG, "눌림")
         lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
             CameraSelector.LENS_FACING_BACK
         } else {
             CameraSelector.LENS_FACING_FRONT
         }
         startCamera()
+    }
+
+    //갤러리에서 사진 불러오기
+    fun galleryBtn(view: View) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.setType("image/*")
+        // 갤러리 액티비티로부터 가져온 결과 데이터를 처리하기 위해
+        // StartActivityForResult() 함수를 통해 액티비티를 실행
+        startActivityForResult(intent, OPEN_GALLERY)
     }
 
     //카메라 시작
@@ -143,9 +166,10 @@ class MainActivity : AppCompatActivity() {
                 cameraProvider.unbindAll()
 
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture, imageAnalyzer)
+                    this, cameraSelector, preview, imageCapture, imageAnalyzer
+                )
 
-            } catch(exc: Exception) {
+            } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
@@ -154,12 +178,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            baseContext, it) == PackageManager.PERMISSION_GRANTED
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getOutputDirectory(): File {
         val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() } }
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+        }
         return if (mediaDir != null && mediaDir.exists())
             mediaDir else filesDir
     }
@@ -167,6 +193,36 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == OPEN_GALLERY) {
+            if (resultCode == RESULT_OK) {
+                var currentImageUri = data?.data
+
+                try {
+                    currentImageUri?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                this.contentResolver,
+                                currentImageUri
+                            )
+//                            imageView?.setImageBitmap(bitmap)
+                        } else {
+                            val source =
+                                ImageDecoder.createSource(this.contentResolver, currentImageUri)
+                            val bitmap = ImageDecoder.decodeBitmap(source)
+//                            imageView?.setImageBitmap(bitmap)
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     companion object {
