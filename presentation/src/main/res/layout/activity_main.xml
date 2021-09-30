@@ -93,7 +93,7 @@
                 android:id="@+id/change"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-
+                android:onClick="@{activity::changeCamera}"
                 android:src="@drawable/change"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

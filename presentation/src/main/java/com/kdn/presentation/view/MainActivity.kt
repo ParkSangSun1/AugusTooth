@@ -8,10 +8,12 @@ import android.net.Uri
 import android.Manifest
 import android.content.Intent
 import android.graphics.Color
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.camera.core.*
+import androidx.camera.core.impl.PreviewConfig
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,6 +24,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +34,8 @@ class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+    private var lensFacing = CameraSelector.LENS_FACING_BACK
+    private val TAG = "로그"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +101,18 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    //권한허용시 카메라 시작
+    //전면, 후면 카메라 전환
+    fun changeCamera(view: View) {
+        Log.d(TAG,"눌림")
+        lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
+            CameraSelector.LENS_FACING_BACK
+        } else {
+            CameraSelector.LENS_FACING_FRONT
+        }
+        startCamera()
+    }
+
+    //카메라 시작
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -118,7 +136,8 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
 
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            //val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
 
             try {
                 cameraProvider.unbindAll()
@@ -151,7 +170,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
