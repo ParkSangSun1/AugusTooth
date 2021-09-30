@@ -13,8 +13,11 @@ import android.os.Build
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.core.impl.PreviewConfig
@@ -22,6 +25,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.astritveliu.boom.Boom
+import com.jem.rubberpicker.RubberSeekBar
 import com.kdn.presentation.databinding.ActivityMainBinding
 import java.io.File
 import java.text.SimpleDateFormat
@@ -41,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     private var lensFacing = CameraSelector.LENS_FACING_BACK
     private val TAG = "로그"
     private val OPEN_GALLERY = 1
+    private var camera: Camera? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +65,30 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+      /*  //터치했을때 초점 맞추기
+        binding.viewFinder.setOnTouchListener  { view: View, motionEvent: MotionEvent ->
+            Log.d("로그","카메라 초점 잡기")
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> return@setOnTouchListener true
+                MotionEvent.ACTION_UP -> {
+                    // Get the MeteringPointFactory from PreviewView
+                    val factory = binding.viewFinder.meteringPointFactory
+
+                    // Create a MeteringPoint from the tap coordinates
+                    val point = factory.createPoint(motionEvent.x, motionEvent.y)
+
+                    // Create a MeteringAction from the MeteringPoint, you can configure it to specify the metering mode
+                    val action = FocusMeteringAction.Builder(point).build()
+
+                    // Trigger the focus and metering. The method returns a ListenableFuture since the operation
+                    // is asynchronous. You can use it get notified when the focus is successful or if it fails.
+                    camera?.cameraControl?.startFocusAndMetering(action)
+
+                    return@setOnTouchListener true
+                }
+                else -> return@setOnTouchListener false
+            }
+        }*/
         outputDirectory = getOutputDirectory()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -87,6 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     //사진 버튼 클릭
     fun takePhoto(view: View) {
+        Boom(binding.frontCircle)
         val imageCapture = imageCapture ?: return
 
         val photoFile = File(
@@ -159,15 +190,46 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
 
+
             //val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
 
             try {
                 cameraProvider.unbindAll()
 
-                cameraProvider.bindToLifecycle(
+                val cameraControl =  cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture, imageAnalyzer
                 )
+
+                //줌 리스너 추가
+                binding.zoomSeekBar.setOnRubberSeekBarChangeListener(object : RubberSeekBar.OnRubberSeekBarChangeListener {
+                    override fun onProgressChanged(
+                        seekBar: RubberSeekBar,
+                        value: Int,
+                        fromUser: Boolean
+                    ) {
+                        cameraControl.cameraControl.setLinearZoom(value / 100.toFloat())
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: RubberSeekBar) {
+                        binding.zoomTxt.visibility = View.INVISIBLE
+                    }
+
+                    override fun onStopTrackingTouch(seekBar: RubberSeekBar) {
+                        binding.zoomTxt.visibility = View.VISIBLE
+
+                    }
+                })
+/*
+
+                val scaleGestureDetector = ScaleGestureDetector(this, listener)
+
+                binding.viewFinder.setOnTouchListener { _, event ->
+                    scaleGestureDetector.onTouchEvent(event)
+                    return@setOnTouchListener true
+                }
+*/
+
 
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -175,6 +237,14 @@ class MainActivity : AppCompatActivity() {
 
         }, ContextCompat.getMainExecutor(this))
     }
+
+/*    val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val scale =camera?.cameraInfo.zoomRatio.value * detector.scaleFactor
+            cameraControl.setZoomRatio(scale)
+            return true
+        }
+    }*/
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -195,6 +265,7 @@ class MainActivity : AppCompatActivity() {
         cameraExecutor.shutdown()
     }
 
+    //갤러리에서 사진 선택
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPEN_GALLERY) {
@@ -224,6 +295,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
+
 
     companion object {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
