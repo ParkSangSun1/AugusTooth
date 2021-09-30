@@ -9,6 +9,7 @@ import android.Manifest
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-
+        binding.activity = this
        // binding.teeth.setColorFilter(Color.parseColor("#FFFFFF"))
         binding.gallery.setColorFilter(Color.parseColor("#C3C0C0"))
         binding.backgroundCircle.setColorFilter(Color.parseColor("#F98484"))
@@ -45,15 +46,13 @@ class MainActivity : AppCompatActivity() {
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
-        binding.cameraCaptureButton.setOnClickListener { takePhoto() }
-
         outputDirectory = getOutputDirectory()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
     }
 
-
+    //권한승인 요청 or 권한확인
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
         IntArray) {
@@ -63,14 +62,15 @@ class MainActivity : AppCompatActivity() {
                 startCamera()
             } else {
                 Toast.makeText(this,
-                    "Permissions not granted by the user.",
+                    "권한을 반드시 승인해야 합니다",
                     Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
     }
 
-    private fun takePhoto() {
+    //사진 버튼 클릭
+     fun takePhoto(view : View) {
         val imageCapture = imageCapture ?: return
 
         val photoFile = File(
@@ -85,30 +85,22 @@ class MainActivity : AppCompatActivity() {
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
-
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = Uri.fromFile(photoFile)
-                    val msg = "Photo capture succeeded: $savedUri"
-
-                    val mediaScanIntent: Intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    val contentUri: Uri = Uri.fromFile(photoFile);
-                    mediaScanIntent.setData(contentUri);
-                    sendBroadcast(mediaScanIntent);
-
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+                    val mediaScanIntent: Intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+                    val contentUri: Uri = Uri.fromFile(photoFile)
+                    mediaScanIntent.data = contentUri
+                    sendBroadcast(mediaScanIntent)
                 }
             })
     }
 
+    //권한허용시 카메라 시작
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener(Runnable {
-            // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-            // Preview
             val preview = Preview.Builder()
                 .build()
                 .also {
@@ -126,14 +118,11 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
 
-            // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
 
-                // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture, imageAnalyzer)
 
