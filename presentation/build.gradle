@@ -106,5 +106,5 @@ dependencies {
     // If you want to additionally use the CameraX Extensions library
     implementation "androidx.camera:camera-extensions:1.0.0-alpha29"
     //버튼 클릭 이벤트 처리
-    //implementation 'com.github.astrit-veliu:Boom:v1.1'
+    implementation 'com.github.astrit-veliu:Boom:v1.1'
 }
