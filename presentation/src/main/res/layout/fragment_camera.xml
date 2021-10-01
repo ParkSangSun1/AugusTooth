@@ -124,14 +124,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/location_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="30dp"
-                android:padding="5dp"
-                android:src="@drawable/location" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="15dp"
+                android:layout_centerInParent="true">
+                <ImageView
+                    android:id="@+id/setting_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:onClick="@{fragment::settingBtn}"
+                    android:layout_marginEnd="10dp"
+                    android:padding="5dp"
+                    android:src="@drawable/setting" />
+                <ImageView
+                    android:id="@+id/location_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="5dp"
+                    android:src="@drawable/location" />
+            </LinearLayout>
+
         </RelativeLayout>
 
 
