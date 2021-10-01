@@ -9,5 +9,18 @@
         android:id="@+id/cameraFragment"
         android:name="com.kdn.presentation.view.CameraFragment"
         android:label="CameraFragment"
-        tools:layout="@layout/fragment_camera"/>
+        tools:layout="@layout/fragment_camera">
+        <action
+            android:id="@+id/action_cameraFragment_to_cameraAutoFragment"
+            app:destination="@id/cameraAutoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraAutoFragment"
+        android:name="com.kdn.presentation.view.SettingFragment"
+        android:label="fragment_camera_auto"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

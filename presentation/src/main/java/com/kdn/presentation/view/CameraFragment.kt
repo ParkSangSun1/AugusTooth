@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.jem.rubberpicker.RubberSeekBar
 import com.kdn.presentation.R
 import com.kdn.presentation.databinding.ActivityMainBinding
@@ -78,6 +79,7 @@ class CameraFragment : Fragment() {
         return binding.root
     }
 
+
     //권한승인 요청 or 권한확인
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults:
@@ -90,12 +92,16 @@ class CameraFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "권한을 반드시 승인해야 합니다",
+                    "설정에서 카메라 권한을 승인해 주세요",
                     Toast.LENGTH_SHORT
                 ).show()
-                viewModel.setCameraAutoCheck(false)
             }
         }
+    }
+
+    //설정 버튼 클릭
+    fun settingBtn(view: View){
+        view.findNavController().navigate(R.id.action_cameraFragment_to_cameraAutoFragment)
     }
 
     //사진 버튼 클릭
@@ -259,7 +265,7 @@ class CameraFragment : Fragment() {
                     e.printStackTrace()
                 }
             } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
-                Toast.makeText(requireContext(), "사진 선택 취소", Toast.LENGTH_LONG).show();
+                Log.d("로그","사진 취소됨")
             }
         }
     }
@@ -269,7 +275,7 @@ class CameraFragment : Fragment() {
 
     companion object {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        const val REQUEST_CODE_PERMISSIONS = 10
+        val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }

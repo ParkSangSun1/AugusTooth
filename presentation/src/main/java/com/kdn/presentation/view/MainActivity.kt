@@ -46,28 +46,11 @@ import kotlin.math.min
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var imageCapture: ImageCapture? = null
-    private lateinit var outputDirectory: File
-    private lateinit var cameraExecutor: ExecutorService
-    private var lensFacing = CameraSelector.LENS_FACING_BACK
-    private val TAG = "로그"
-    private val OPEN_GALLERY = 1
-    private var camera: Camera? = null
     private val viewModel by viewModels<MainViewModel>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.activity = this
-        observeViewModel()
     }
-
-    private fun observeViewModel(){
-        viewModel.cameraAutoCheck.observe(this, androidx.lifecycle.Observer {
-            if (it==false) finish()
-        })
-    }
-
-
 }
