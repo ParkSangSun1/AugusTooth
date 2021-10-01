@@ -4,7 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/drawable/zoom_txt_background.xml" value="0.24270833333333333" />
-        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/activity_main.xml" value="0.176" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_camera.xml" value="0.19114583333333332" />
       </map>
     </option>
   </component>
