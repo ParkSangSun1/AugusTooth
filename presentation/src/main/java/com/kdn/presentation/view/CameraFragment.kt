@@ -61,8 +61,18 @@ class CameraFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false)
         binding.fragment = this
+        initColor()
+        checkAuth()
+        initCamera()
+        return binding.root
+    }
+
+    private fun initColor() {
         binding.backgroundCircle.setColorFilter(Color.parseColor("#F98484"))
 
+    }
+
+    private fun checkAuth() {
         if (allPermissionsGranted()) {
             startCamera()
         } else {
@@ -70,15 +80,12 @@ class CameraFragment : Fragment() {
                 requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
-
-
-        outputDirectory = getOutputDirectory()
-
-        cameraExecutor = Executors.newSingleThreadExecutor()
-
-        return binding.root
     }
 
+    private fun initCamera() {
+        outputDirectory = getOutputDirectory()
+        cameraExecutor = Executors.newSingleThreadExecutor()
+    }
 
     //권한승인 요청 or 권한확인
     override fun onRequestPermissionsResult(
@@ -100,13 +107,13 @@ class CameraFragment : Fragment() {
     }
 
     //설정 버튼 클릭
-    fun settingBtn(view: View){
+    fun settingBtn(view: View) {
         view.findNavController().navigate(R.id.action_cameraFragment_to_cameraAutoFragment)
     }
 
     //사진 버튼 클릭
     fun takePhoto(view: View) {
-        Log.d("로기","찍힘")
+        Log.d("로기", "찍힘")
 
         imageCapture = imageCapture ?: return
         val photoFile = File(
@@ -186,12 +193,13 @@ class CameraFragment : Fragment() {
             try {
                 cameraProvider.unbindAll()
 
-                val cameraControl =  cameraProvider.bindToLifecycle(
+                val cameraControl = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture, imageAnalyzer
                 )
 
                 //seekbar 줌 리스너 추가
-                binding.zoomSeekBar.setOnRubberSeekBarChangeListener(object : RubberSeekBar.OnRubberSeekBarChangeListener {
+                binding.zoomSeekBar.setOnRubberSeekBarChangeListener(object :
+                    RubberSeekBar.OnRubberSeekBarChangeListener {
                     override fun onProgressChanged(
                         seekBar: RubberSeekBar,
                         value: Int,
@@ -209,7 +217,6 @@ class CameraFragment : Fragment() {
 
                     }
                 })
-
 
 
             } catch (exc: Exception) {
@@ -256,7 +263,10 @@ class CameraFragment : Fragment() {
 //                            imageView?.setImageBitmap(bitmap)
                         } else {
                             val source =
-                                ImageDecoder.createSource(requireContext().contentResolver, currentImageUri)
+                                ImageDecoder.createSource(
+                                    requireContext().contentResolver,
+                                    currentImageUri
+                                )
                             val bitmap = ImageDecoder.decodeBitmap(source)
 //                            imageView?.setImageBitmap(bitmap)
                         }
@@ -265,12 +275,10 @@ class CameraFragment : Fragment() {
                     e.printStackTrace()
                 }
             } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
-                Log.d("로그","사진 취소됨")
+                Log.d("로그", "사진 취소됨")
             }
         }
     }
-
-
 
 
     companion object {
