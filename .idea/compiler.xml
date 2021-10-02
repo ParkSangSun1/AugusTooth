@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
       <module name="AugusTooth.app" target="11" />
+      <module name="AugusTooth.buildSrc" target="11" />
       <module name="AugusTooth.data" target="11" />
       <module name="AugusTooth.presentation" target="11" />
     </bytecodeTargetLevel>
