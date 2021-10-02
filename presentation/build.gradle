@@ -41,83 +41,62 @@ android {
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-
     implementation project(":domain")
 
+    implementation (KTX.CORE)
+    implementation (AndroidX.APP_COMPAT)
+    implementation (Google.MATERIAL)
+    implementation (AndroidX.CONSTRAINT_LAYOUT)
+    implementation (AndroidX.LEGACY)
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation (AndroidTest.EXT_JUNIT)
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
     // dager hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-android-compiler:2.38.1"
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+    implementation (DaggerHilt.DAGGER_HILT)
+    kapt (DaggerHilt.DAGGER_HILT_COMPILER)
+    implementation (DaggerHilt.DAGGER_HILT_VIEW_MODEL)
+    kapt (DaggerHilt.DAGGER_HILT_ANDROIDX_COMPILER)
 
     // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation (AndroidX.LIFECYCLE_VIEW_MODEL)
 
     // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    implementation (AndroidX.LIFECYCLE_LIVEDATA)
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-jaxb:2.9.0'
+    implementation (Retrofit.RETROFIT)
+    implementation (Retrofit.CONVERTER_GSON)
+    implementation (Retrofit.CONVERTER_JAXB)
 
     //okHttp
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+    implementation (OkHttp.OKHTTP)
+    implementation (OkHttp.LOGGING_INTERCEPTOR)
 
     //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation (Coroutines.COROUTINES)
 
     //by viewModel
-    implementation 'androidx.activity:activity-ktx:1.3.1'
-    implementation 'androidx.fragment:fragment-ktx:1.3.6'
+    implementation (AndroidX.ACTIVITY)
+    implementation (AndroidX.FRAGMENT)
 
-/*
-    //cameraX
-    def camerax_version = "1.0.1"
+    //CameraX
+    implementation (CameraX.CAMERA_CORE)
+    implementation (CameraX.CAMERA_CAMERA2)
+    implementation (CameraX.CAMERA_LIFECYCLE)
+    implementation (CameraX.CAMERA_VIEW)
+    implementation (CameraX.CAMERA_EXTENSIONS)
 
-    // CameraX core library using camera2 implementation
-    implementation "androidx.camera:camera-camera2:$camerax_version"
-
-    // CameraX Lifecycle Library
-    implementation "androidx.camera:camera-lifecycle:$camerax_version"
-
-    // CameraX View class
-    implementation "androidx.camera:camera-view:1.0.0-alpha28"
-*/
-
-    // CameraX core library using the camera2 implementation
-    def camerax_version = "1.0.2"
-    // The following line is optional, as the core library is included indirectly by camera-camera2
-    implementation "androidx.camera:camera-core:${camerax_version}"
-    implementation "androidx.camera:camera-camera2:${camerax_version}"
-    // If you want to additionally use the CameraX Lifecycle library
-    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
-    // If you want to additionally use the CameraX View class
-    implementation "androidx.camera:camera-view:1.0.0-alpha29"
-    // If you want to additionally use the CameraX Extensions library
-    implementation "androidx.camera:camera-extensions:1.0.0-alpha29"
     //버튼 클릭 이벤트 처리
     implementation 'com.github.realpacific:click-shrink-effect:2.0'
 
     //seekbar
     implementation 'com.github.Chrisvin:RubberPicker:v1.5'
 
-
-    //nav; component
-    def nav_version = "2.3.5"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
-    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
+    //nav component
+    implementation (NavComponent.NAVIGATION_FRAGMENT)
+    implementation (NavComponent.NAVIGATION_UI)
+    implementation (NavComponent.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
+    androidTestImplementation (NavComponent.NAVIGATION_TESTING)
+    implementation (NavComponent.NAVIGATION_COMPOSE)
 }
