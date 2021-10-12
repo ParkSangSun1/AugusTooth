@@ -10,12 +10,15 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.kdn.presentation.R
 import com.kdn.presentation.databinding.FragmentSettingBinding
+import com.kdn.presentation.viewmodel.MainViewModel
 
 class SettingFragment : Fragment() {
+    private val viewModel by activityViewModels<MainViewModel>()
 
     private lateinit var binding: FragmentSettingBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,9 +42,15 @@ class SettingFragment : Fragment() {
               )
           }*/
 
+        checkFlashLightState()
 
 
         return binding.root
+    }
+
+    private fun checkFlashLightState(){
+        if (viewModel.cameraFlashLight.value!!) binding.flashlightState.text = "켜짐"
+        else binding.flashlightState.text = "꺼짐"
     }
 
     //카메라 권한 승인 클릭
@@ -59,6 +68,12 @@ class SettingFragment : Fragment() {
                 CameraFragment.REQUEST_CODE_PERMISSIONS
             )
         }
+    }
+
+    fun cameraFlashLightBtn(view: View){
+        if (viewModel.cameraFlashLight.value!!) viewModel.setCameraFlashLight(false)
+        else viewModel.setCameraFlashLight(true)
+        checkFlashLightState()
     }
 
     //뒤로가기 클릭

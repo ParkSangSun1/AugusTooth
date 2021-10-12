@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
+import androidx.camera.core.ImageCapture.FLASH_MODE_OFF
+import androidx.camera.core.ImageCapture.FLASH_MODE_ON
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -64,6 +67,7 @@ class CameraFragment : Fragment() {
         initColor()
         checkAuth()
         initCamera()
+        observeViewModel()
         return binding.root
     }
 
@@ -111,9 +115,35 @@ class CameraFragment : Fragment() {
         view.findNavController().navigate(R.id.action_cameraFragment_to_cameraAutoFragment)
     }
 
+    //플래시 기능 켜져있는지 확인
+    private fun checkFlashLightState() {
+        if (viewModel.cameraFlashLight.value!!) imageCapture?.flashMode = FLASH_MODE_ON
+        else imageCapture?.flashMode = FLASH_MODE_OFF
+    }
+
+    //플래시 버튼 클릭
+    fun flashLightBtn(view: View) {
+        if (viewModel.cameraFlashLight.value!!) viewModel.setCameraFlashLight(false)
+        else viewModel.setCameraFlashLight(true)
+    }
+
+    private fun observeViewModel() {
+        viewModel.cameraFlashLight.observe(requireActivity(), androidx.lifecycle.Observer {
+            checkFlashLightState(it)
+        })
+    }
+
+    private fun checkFlashLightState(it: Boolean) {
+        if (it) binding.flashlightBtn.setImageResource(R.drawable.flashlight_false)
+        else binding.flashlightBtn.setImageResource(R.drawable.flashlight_true)
+    }
+
+
     //사진 버튼 클릭
     fun takePhoto(view: View) {
         Log.d("로기", "찍힘")
+
+        checkFlashLightState()
 
         imageCapture = imageCapture ?: return
         val photoFile = File(
@@ -192,6 +222,7 @@ class CameraFragment : Fragment() {
 
             try {
                 cameraProvider.unbindAll()
+
 
                 val cameraControl = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture, imageAnalyzer

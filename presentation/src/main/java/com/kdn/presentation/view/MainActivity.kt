@@ -52,5 +52,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.activity = this
+
+        initViewModel()
+    }
+
+    private fun initViewModel(){
+        viewModel.setCameraFlashLight(false)
     }
 }
