@@ -30,8 +30,6 @@ import com.jem.rubberpicker.RubberSeekBar
 import com.kdn.presentation.R
 import com.kdn.presentation.databinding.ActivityMainBinding
 import com.kdn.presentation.databinding.FragmentCameraBinding
-import com.kdn.presentation.view.CameraFragment.Companion.REQUEST_CODE_PERMISSIONS
-import com.kdn.presentation.view.CameraFragment.Companion.REQUIRED_PERMISSIONS
 import com.kdn.presentation.viewmodel.MainViewModel
 import com.realpacific.clickshrinkeffect.applyClickShrink
 import java.io.File

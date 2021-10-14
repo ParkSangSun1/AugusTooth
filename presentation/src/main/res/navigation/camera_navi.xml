@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.kdn.presentation.view.CameraFragment"
+        android:name="com.kdn.presentation.view.cameramain.CameraFragment"
         android:label="CameraFragment"
         tools:layout="@layout/fragment_camera">
         <action

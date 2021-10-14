@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.kdn.presentation.R
 import com.kdn.presentation.databinding.FragmentSettingBinding
+import com.kdn.presentation.view.cameramain.CameraFragment
 import com.kdn.presentation.viewmodel.MainViewModel
 
 class SettingFragment : Fragment() {
