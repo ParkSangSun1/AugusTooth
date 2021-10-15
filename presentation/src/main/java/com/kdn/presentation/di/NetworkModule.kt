@@ -1,6 +1,6 @@
 package com.kdn.presentation.di
 
-import com.kdn.presentation.utils.ApiUrl.HOSPITAL_LOCATION_BASE_URL
+import com.kdn.presentation.widget.utils.ApiUrl.HOSPITAL_LOCATION_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
