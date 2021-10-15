@@ -103,4 +103,7 @@ dependencies {
     implementation (NavComponent.NAVIGATION_DYNAMIC_FEATURES_FRAGMENT)
     androidTestImplementation (NavComponent.NAVIGATION_TESTING)
     implementation (NavComponent.NAVIGATION_COMPOSE)
+
+    //lottie 애니메이션
+    implementation 'com.airbnb.android:lottie:3.4.1'
 }

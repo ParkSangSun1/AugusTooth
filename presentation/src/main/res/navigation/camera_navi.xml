@@ -17,10 +17,18 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_cameraFragment_to_imageAnalysisFragment"
+            app:destination="@id/imageAnalysisFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraAutoFragment"
         android:name="com.kdn.presentation.view.SettingFragment"
         android:label="fragment_camera_auto"
         tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/imageAnalysisFragment"
+        android:name="com.kdn.presentation.view.ImageAnalysisFragment"
+        android:label="fragment_image_analysis"
+        tools:layout="@layout/fragment_image_analysis" />
 </navigation>
