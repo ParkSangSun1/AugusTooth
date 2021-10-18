@@ -20,15 +20,35 @@
         <action
             android:id="@+id/action_cameraFragment_to_imageAnalysisFragment"
             app:destination="@id/imageAnalysisFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_locationFragment"
+            app:destination="@id/locationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/cameraAutoFragment"
         android:name="com.kdn.presentation.view.SettingFragment"
         android:label="fragment_camera_auto"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_cameraAutoFragment_to_locationFragment"
+            app:destination="@id/locationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
     <fragment
         android:id="@+id/imageAnalysisFragment"
         android:name="com.kdn.presentation.view.ImageAnalysisFragment"
         android:label="fragment_image_analysis"
         tools:layout="@layout/fragment_image_analysis" />
+    <fragment
+        android:id="@+id/locationFragment"
+        android:name="com.kdn.presentation.view.setting.LocationFragment"
+        tools:layout="@layout/fragment_location"
+        android:label="LocationFragment" />
 </navigation>

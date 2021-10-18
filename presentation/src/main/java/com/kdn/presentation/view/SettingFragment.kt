@@ -53,6 +53,10 @@ class SettingFragment : Fragment() {
         checkFlashLightState()
     }
 
+    fun locationBtn(view: View){
+        this.findNavController().navigate(R.id.action_cameraAutoFragment_to_locationFragment)
+    }
+
     //뒤로가기 클릭
     fun backBtn(view: View){
         view.findNavController().popBackStack()

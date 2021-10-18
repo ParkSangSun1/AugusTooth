@@ -74,8 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:onClick="@{fragment::cameraFlashLightBtn}"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -120,9 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="20dp"
-                android:background="@color/line"
-                />
-
+                android:background="@color/line" />
 
 
             <LinearLayout
@@ -130,21 +127,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                >
+                android:onClick="@{fragment::locationBtn}"
+                android:orientation="vertical">
 
 
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/spoqahansansneo_medium"
-                        android:gravity="start"
-                        android:text="위치 설정"
-                        android:textColor="@color/black"
-                        android:textSize="22sp" />
-
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/spoqahansansneo_medium"
+                    android:gravity="start"
+                    android:text="위치 설정"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
 
 
                 <TextView
@@ -160,8 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="20dp"
-                android:background="@color/line"
-                />
+                android:background="@color/line" />
 
 
         </LinearLayout>

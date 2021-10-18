@@ -239,6 +239,12 @@ class CameraFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 
+
+    fun locationBtn(view: View){
+        this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
+    }
+
+
     //갤러리에서 사진 선택
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
