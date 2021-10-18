@@ -3,14 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2777777777777778" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2777777777777778" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/drawable/zoom_txt_background.xml" value="0.24270833333333333" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/activity_splash.xml" value="0.21693840579710144" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_camera.xml" value="0.2" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_camera_auto.xml" value="0.2" />
-        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_image_analysis.xml" value="0.20697463768115942" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_image_analysis.xml" value="0.136" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_setting.xml" value="0.2" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_splash.xml" value="0.136" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2777777777777778" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2777777777777778" />
       </map>
     </option>
   </component>

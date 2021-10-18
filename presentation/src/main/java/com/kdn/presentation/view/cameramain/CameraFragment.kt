@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.jem.rubberpicker.RubberSeekBar
 import com.kdn.presentation.R
 import com.kdn.presentation.databinding.ActivityMainBinding
@@ -280,6 +281,7 @@ class CameraFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPEN_GALLERY) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
+                //선택한 이미지의 데이터가 이곳에 저장
                 var currentImageUri = data?.data
 
                 try {
@@ -289,6 +291,7 @@ class CameraFragment : Fragment() {
                                 requireContext().contentResolver,
                                 currentImageUri
                             )
+                            this.findNavController().navigate(R.id.action_cameraFragment_to_imageAnalysisFragment)
 //                            imageView?.setImageBitmap(bitmap)
                         } else {
                             val source =
