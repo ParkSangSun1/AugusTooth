@@ -64,15 +64,15 @@ class CameraFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false)
         binding.fragment = this
         initColor()
-        checkAuth()
+       // checkAuth()
         initCamera()
         observeViewModel()
+        startCamera()
         return binding.root
     }
 
     private fun initColor() {
         binding.backgroundCircle.setColorFilter(Color.parseColor("#F98484"))
-
     }
 
     private fun checkAuth() {
@@ -83,6 +83,12 @@ class CameraFragment : Fragment() {
                 requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
+    }
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun initCamera() {
@@ -98,6 +104,7 @@ class CameraFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
+                Log.d("로그","여기 왔다이")
                 startCamera()
             } else {
                 Toast.makeText(
@@ -254,13 +261,6 @@ class CameraFragment : Fragment() {
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            requireContext(), it
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun getOutputDirectory(): File {
