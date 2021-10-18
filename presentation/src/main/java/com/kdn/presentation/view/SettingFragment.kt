@@ -33,15 +33,7 @@ class SettingFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
         binding.fragment = this
-        /*  if (allPermissionsGranted()) {
-              startCamera()
-          } else {
-              ActivityCompat.requestPermissions(
-                  requireActivity(),
-                  CameraFragment.REQUIRED_PERMISSIONS,
-                  CameraFragment.REQUEST_CODE_PERMISSIONS
-              )
-          }*/
+
 
         checkFlashLightState()
 
@@ -54,22 +46,6 @@ class SettingFragment : Fragment() {
         else binding.flashlightState.text = "꺼짐"
     }
 
-    //카메라 권한 승인 클릭
-    fun cameraAuthBtn(view: View) {
-        if (allPermissionsGranted()) {
-            Toast.makeText(
-                requireContext(),
-                "이미 권한을 승인했습니다",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                CameraFragment.REQUIRED_PERMISSIONS,
-                CameraFragment.REQUEST_CODE_PERMISSIONS
-            )
-        }
-    }
 
     fun cameraFlashLightBtn(view: View){
         if (viewModel.cameraFlashLight.value!!) viewModel.setCameraFlashLight(false)
@@ -81,32 +57,4 @@ class SettingFragment : Fragment() {
     fun backBtn(view: View){
         view.findNavController().popBackStack()
     }
-
-    //권한승인 요청 or 권한확인
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CameraFragment.REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                this.findNavController().popBackStack()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "권한을 반드시 승인해야 합니다",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            }
-            this.findNavController().popBackStack()
-        }
-    }
-
-    private fun allPermissionsGranted() = CameraFragment.REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            requireContext(), it
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
 }

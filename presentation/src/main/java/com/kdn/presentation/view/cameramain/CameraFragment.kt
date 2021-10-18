@@ -64,7 +64,6 @@ class CameraFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false)
         binding.fragment = this
         initColor()
-       // checkAuth()
         initCamera()
         observeViewModel()
         startCamera()
@@ -75,45 +74,9 @@ class CameraFragment : Fragment() {
         binding.backgroundCircle.setColorFilter(Color.parseColor("#F98484"))
     }
 
-    private fun checkAuth() {
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
-        }
-    }
-
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            requireContext(), it
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
     private fun initCamera() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
-    }
-
-    //권한승인 요청 or 권한확인
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                Log.d("로그","여기 왔다이")
-                startCamera()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "설정에서 카메라 권한을 승인해 주세요",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
     }
 
     //설정 버튼 클릭
