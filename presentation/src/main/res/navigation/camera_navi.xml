@@ -19,7 +19,11 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_cameraFragment_to_imageAnalysisFragment"
-            app:destination="@id/imageAnalysisFragment" />
+            app:destination="@id/imageAnalysisFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_cameraFragment_to_locationFragment"
             app:destination="@id/locationFragment"
@@ -45,7 +49,11 @@
         android:id="@+id/imageAnalysisFragment"
         android:name="com.kdn.presentation.view.ImageAnalysisFragment"
         android:label="fragment_image_analysis"
-        tools:layout="@layout/fragment_image_analysis" />
+        tools:layout="@layout/fragment_image_analysis" >
+        <argument
+            android:name="imageBitmap"
+            app:argType="android.graphics.Bitmap" />
+    </fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.kdn.presentation.view.setting.LocationFragment"

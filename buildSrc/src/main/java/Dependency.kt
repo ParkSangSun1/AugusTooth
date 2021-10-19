@@ -1,7 +1,7 @@
 import Versions.NAV_VERSION
 
 object Versions {
-    const val NAV_VERSION = "2.3.5"
+    const val NAV_VERSION = "2.4.0-alpha10"
 
 }
 

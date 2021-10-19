@@ -260,7 +260,7 @@ class CameraFragment : Fragment() {
                                 requireContext().contentResolver,
                                 currentImageUri
                             )
-                            this.findNavController().navigate(R.id.action_cameraFragment_to_imageAnalysisFragment)
+                            this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
 //                            imageView?.setImageBitmap(bitmap)
                         } else {
                             val source =
@@ -269,6 +269,8 @@ class CameraFragment : Fragment() {
                                     currentImageUri
                                 )
                             val bitmap = ImageDecoder.decodeBitmap(source)
+                            this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
+
 //                            imageView?.setImageBitmap(bitmap)
                         }
                     }
