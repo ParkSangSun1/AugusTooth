@@ -25,7 +25,9 @@ class SplashActivity : AppCompatActivity() {
     private var permissionArray = arrayOf(
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.CAMERA
+        Manifest.permission.CAMERA,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
     private val MULTI_PERMISSION = 999
     var permissionNoRealTime: ArrayList<String> = ArrayList() //실시간 퍼미션 거부된 값을 담는다
