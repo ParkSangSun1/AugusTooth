@@ -97,11 +97,11 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="30dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_toStartOf="@id/search"
                     android:background="@null"
                     android:fontFamily="@font/spoqahansansneo_medium"
                     android:hint="도로명 주소를 입력하세요"
+                    android:maxLines="1"
+                    android:layout_alignParentEnd="true"
                     android:includeFontPadding="false"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
@@ -114,15 +114,7 @@
                     android:layout_marginEnd="10dp"
                     android:background="@color/main_color" />
 
-                <ImageView
-                    android:id="@+id/search"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:padding="5dp"
-                    android:src="@drawable/search" />
+
             </RelativeLayout>
 
             <androidx.appcompat.widget.AppCompatButton
