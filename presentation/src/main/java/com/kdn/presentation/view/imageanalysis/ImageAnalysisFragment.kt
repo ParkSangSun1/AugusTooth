@@ -33,6 +33,7 @@ import android.graphics.ImageDecoder
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.SystemClock
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 
 
@@ -75,8 +76,16 @@ class ImageAnalysisFragment : Fragment() {
                 val moduleForwardStartTime = SystemClock.elapsedRealtime()
                 val outputTensor = module?.forward(IValue.from(inputTensor))?.toTensor()
 
+                //걸린 시간
                 val moduleForwardDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime
-                Log.d("TAG", "outputTensor : $outputTensor}, $moduleForwardDuration")
+                val scores = outputTensor?.dataAsFloatArray
+
+             //   Log.d("TAG", "outputTensor : $outputTensor}, $moduleForwardDuration, ${scores?.get(0)}, ${scores?.get(1)}")
+
+                for (index in 0 until scores?.size!!){
+                    Log.d("TAG", "outputTensor :  ${scores.get(index)}")
+                    //Toast.makeText(requireContext(),"${scores.get(index)}",Toast.LENGTH_SHORT).show()
+                }
 
             } catch (e: Exception) {
                 Log.d("TAG", "ImageAnalysisError : $e")
