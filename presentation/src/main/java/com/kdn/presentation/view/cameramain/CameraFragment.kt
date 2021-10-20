@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.ImageDecoder
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -261,7 +262,6 @@ class CameraFragment : Fragment() {
                                 currentImageUri
                             )
                             this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
-//                            imageView?.setImageBitmap(bitmap)
                         } else {
                             val source =
                                 ImageDecoder.createSource(
@@ -270,8 +270,6 @@ class CameraFragment : Fragment() {
                                 )
                             val bitmap = ImageDecoder.decodeBitmap(source)
                             this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
-
-//                            imageView?.setImageBitmap(bitmap)
                         }
                     }
                 } catch (e: Exception) {

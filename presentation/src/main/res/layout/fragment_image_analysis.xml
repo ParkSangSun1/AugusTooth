@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.ImageAnalysisFragment">
+        tools:context=".view.imageanalysis.ImageAnalysisFragment">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/imageView"
@@ -24,6 +24,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/analysis" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

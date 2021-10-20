@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/imageAnalysisFragment"
-        android:name="com.kdn.presentation.view.ImageAnalysisFragment"
+        android:name="com.kdn.presentation.view.imageanalysis.ImageAnalysisFragment"
         android:label="fragment_image_analysis"
         tools:layout="@layout/fragment_image_analysis" >
         <argument
