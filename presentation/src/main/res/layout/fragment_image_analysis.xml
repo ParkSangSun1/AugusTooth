@@ -26,6 +26,5 @@
             app:lottie_rawRes="@raw/analysis" />
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

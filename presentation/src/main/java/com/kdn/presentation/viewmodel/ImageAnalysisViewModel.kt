@@ -14,7 +14,14 @@ class ImageAnalysisViewModel(
     val imageBitmap : LiveData<Bitmap> get() = _imageBitmap
     private val _imageBitmap = MutableLiveData<Bitmap>()
 
+    val analysisText : LiveData<String> get() = _analysisText
+    private val _analysisText = MutableLiveData<String>()
+
     fun setImageBitmap(image : Bitmap){
         _imageBitmap.value = image
+    }
+
+    fun setAnalysisText(txt: String){
+        _analysisText.value = txt
     }
 }
