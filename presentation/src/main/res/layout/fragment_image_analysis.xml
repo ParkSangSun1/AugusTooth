@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.kdn.presentation.view.imageanalysis.ImageAnalysisFragment" />
+            type="com.pss.presentation.view.imageanalysis.ImageAnalysisFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

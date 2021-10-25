@@ -6,7 +6,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.kdn.presentation.view.setting.LocationFragment" />
+            type="com.pss.presentation.view.setting.LocationFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.kdn.presentation.view.cameramain.CameraFragment"
+        android:name="com.pss.presentation.view.cameramain.CameraFragment"
         android:label="CameraFragment"
         tools:layout="@layout/fragment_camera">
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraAutoFragment"
-        android:name="com.kdn.presentation.view.setting.SettingFragment"
+        android:name="com.pss.presentation.view.setting.SettingFragment"
         android:label="fragment_camera_auto"
         tools:layout="@layout/fragment_setting" >
         <action
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/imageAnalysisFragment"
-        android:name="com.kdn.presentation.view.imageanalysis.ImageAnalysisFragment"
+        android:name="com.pss.presentation.view.imageanalysis.ImageAnalysisFragment"
         android:label="fragment_image_analysis"
         tools:layout="@layout/fragment_image_analysis" >
         <argument
@@ -56,7 +56,7 @@
     </fragment>
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.kdn.presentation.view.setting.LocationFragment"
+        android:name="com.pss.presentation.view.setting.LocationFragment"
         tools:layout="@layout/fragment_location"
         android:label="LocationFragment" />
 </navigation>
