@@ -35,7 +35,7 @@ object Utils {
         return null
     }
 
-    fun outputsToPredictions(outputs: FloatArray): Int {
+    fun outputResultComparison(outputs: FloatArray): Int {
         var maxScore = -Float.MAX_VALUE
         var maxScoreIdx = -1
         for (i in outputs.indices) {
@@ -45,27 +45,5 @@ object Utils {
             }
         }
         return maxScoreIdx
-    }
-
-    fun topK(a: FloatArray, topk: Int): IntArray {
-        val values = FloatArray(topk)
-        Arrays.fill(values, -java.lang.Float.MAX_VALUE)
-        val ixs = IntArray(topk)
-        Arrays.fill(ixs, -1)
-
-        for (i in a.indices) {
-            for (j in 0 until topk) {
-                if (a[i] > values[j]) {
-                    for (k in topk - 1 downTo j + 1) {
-                        values[k] = values[k - 1]
-                        ixs[k] = ixs[k - 1]
-                    }
-                    values[j] = a[i]
-                    ixs[j] = i
-                    break
-                }
-            }
-        }
-        return ixs
     }
 }
