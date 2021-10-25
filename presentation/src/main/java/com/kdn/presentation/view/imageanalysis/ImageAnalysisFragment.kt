@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.kdn.presentation.viewmodel.ImageAnalysisViewModel
 import com.kdn.presentation.widget.utils.Utils
 import kotlinx.coroutines.*
@@ -53,6 +54,7 @@ class ImageAnalysisFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image_analysis, container, false)
+        binding.fragment = this
         observeViewModel()
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -77,9 +79,12 @@ class ImageAnalysisFragment : Fragment() {
 
     }
 
+    fun backBtn(view: View){
+        this.findNavController().popBackStack()
+    }
+
     private fun observeViewModel() {
         viewModel.analysisImageResponse.observe(requireActivity(), Observer {
-            Log.d("로그", "뷰모델 호출됨")
             if (it != null) {
                 binding.imageView.visibility = View.GONE
                 binding.layout.visibility = View.VISIBLE
