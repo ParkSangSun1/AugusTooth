@@ -249,7 +249,8 @@ class CameraFragment : Fragment() {
 
 
     fun locationBtn(view: View){
-        this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
+        Toast.makeText(requireContext(), "해당 기능은 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
+        //this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
     }
 
 

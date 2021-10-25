@@ -41,24 +41,25 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
-    private fun checkFlashLightState(){
+    private fun checkFlashLightState() {
         if (viewModel.cameraFlashLight.value!!) binding.flashlightState.text = "켜짐"
         else binding.flashlightState.text = "꺼짐"
     }
 
 
-    fun cameraFlashLightBtn(view: View){
+    fun cameraFlashLightBtn(view: View) {
         if (viewModel.cameraFlashLight.value!!) viewModel.setCameraFlashLight(false)
         else viewModel.setCameraFlashLight(true)
         checkFlashLightState()
     }
 
-    fun locationBtn(view: View){
-        this.findNavController().navigate(R.id.action_cameraAutoFragment_to_locationFragment)
+    fun locationBtn(view: View) {
+        Toast.makeText(requireContext(), "해당 기능은 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
+        // this.findNavController().navigate(R.id.action_cameraAutoFragment_to_locationFragment)
     }
 
     //뒤로가기 클릭
-    fun backBtn(view: View){
+    fun backBtn(view: View) {
         view.findNavController().popBackStack()
     }
 }
