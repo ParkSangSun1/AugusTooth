@@ -80,8 +80,19 @@ class ImageAnalysisFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.analysisImageResponse.observe(requireActivity(), Observer {
             Log.d("로그", "뷰모델 호출됨")
-            if (it != null) binding.imageView.visibility = View.GONE
-            else binding.imageView.visibility = View.VISIBLE
+            if (it != null) {
+                binding.imageView.visibility = View.GONE
+                binding.layout.visibility = View.VISIBLE
+                binding.resultTxt.text = when(viewModel.analysisImageResponse.value){
+                    0 -> "교정이 필요하지 않습니다"
+                    1 -> "교정이 필요합니다"
+                    else -> "분석에 실패했습니다"
+                }
+            }
+            else {
+                binding.imageView.visibility = View.VISIBLE
+                binding.layout.visibility = View.INVISIBLE
+            }
         })
     }
 }
