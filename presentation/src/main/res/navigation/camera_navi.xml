@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraAutoFragment"
-        android:name="com.kdn.presentation.view.SettingFragment"
+        android:name="com.kdn.presentation.view.setting.SettingFragment"
         android:label="fragment_camera_auto"
         tools:layout="@layout/fragment_setting" >
         <action

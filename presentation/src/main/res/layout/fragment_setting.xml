@@ -7,14 +7,14 @@
 
         <variable
             name="fragment"
-            type="com.kdn.presentation.view.SettingFragment" />
+            type="com.kdn.presentation.view.setting.SettingFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".view.SettingFragment">
+        tools:context=".view.setting.SettingFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"

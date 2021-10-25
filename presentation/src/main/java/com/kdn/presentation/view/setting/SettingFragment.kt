@@ -1,4 +1,4 @@
-package com.kdn.presentation.view
+package com.kdn.presentation.view.setting
 
 import android.content.pm.PackageManager
 import android.os.Bundle
