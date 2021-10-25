@@ -111,7 +111,6 @@ class CameraFragment : Fragment() {
 
     //사진 버튼 클릭
     fun takePhoto(view: View) {
-        Log.d("로기", "찍힘")
 
         checkFlashLightState()
 
@@ -138,6 +137,14 @@ class CameraFragment : Fragment() {
                     val contentUri: Uri = Uri.fromFile(photoFile)
                     mediaScanIntent.data = contentUri
                     activity?.sendBroadcast(mediaScanIntent)
+
+                    val bitmap = MediaStore.Images.Media.getBitmap(
+                        requireContext().contentResolver,
+                        contentUri
+                    )
+                    Log.d("TAG","사진 촬용후 bitmap : $bitmap")
+                    this@CameraFragment.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
+
                 }
             })
     }
@@ -284,7 +291,5 @@ class CameraFragment : Fragment() {
 
     companion object {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-        const val REQUEST_CODE_PERMISSIONS = 10
-        val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 }
