@@ -26,18 +26,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.jem.rubberpicker.RubberSeekBar
 import com.pss.presentation.R
+import com.pss.presentation.base.BaseFragment
 import com.pss.presentation.databinding.FragmentCameraBinding
 import com.pss.presentation.viewmodel.CameraMainViewModel
+import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_CHANGE_CAMERA
 import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_START_ANALYSIS
+import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_START_GALLERY
+import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_START_LOCATION_SETTING
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CameraFragment : Fragment() {
+class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_camera) {
 
-    private lateinit var binding: FragmentCameraBinding
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
@@ -49,23 +52,13 @@ class CameraFragment : Fragment() {
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false)
+    override fun init() {
         binding.fragment = this
         binding.listeners = Listeners(this, viewModel)
         initColor()
         initCamera()
-        initViewModel()
         observeViewModel()
         startCamera()
-        return binding.root
     }
 
     private fun initColor() {
@@ -77,33 +70,24 @@ class CameraFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    private fun initViewModel() {
-      /*  viewModel.setClickTakePhoto(false)
-        Log.d("TAG","initVIewModel 호출됨")
- */   }
-
-
     //플래시 기능 켜져있는지 확인
     private fun checkFlashLightState() {
         if (viewModel.cameraFlashLight.value!!) imageCapture?.flashMode = FLASH_MODE_ON
         else imageCapture?.flashMode = FLASH_MODE_OFF
     }
 
-
     private fun observeViewModel() {
         viewModel.cameraFlashLight.observe(requireActivity(), androidx.lifecycle.Observer {
             checkFlashLightState(it)
         })
 
-   /*     viewModel.clickTakePhoto.observe(requireActivity(), androidx.lifecycle.Observer {
-            Log.d("TAG","clickTakePhoto : $it")
-            takePhoto()
-        })*/
         viewModel.viewEvent.observe(requireActivity(),{
             it.getContentIfNotHandled()?.let { event ->
-                Log.d("TAG","clickTakePhoto : $it")
                 when(event){
                     EVENT_START_ANALYSIS -> takePhoto()
+                    EVENT_START_GALLERY -> startGallery()
+                    EVENT_CHANGE_CAMERA -> changeCamera()
+                    EVENT_START_LOCATION_SETTING -> startLocationSettingFragment()
                 }
             }
         })
@@ -165,21 +149,13 @@ class CameraFragment : Fragment() {
         )
     }
 
-    //전면, 후면 카메라 전환
-    fun changeCamera(view: View) {
-        //binding.change.applyClickShrink()
-        Log.d(TAG, "눌림")
-        lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
-            CameraSelector.LENS_FACING_BACK
-        } else {
-            CameraSelector.LENS_FACING_FRONT
-        }
+    private fun changeCamera() {
+        lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) CameraSelector.LENS_FACING_BACK
+        else CameraSelector.LENS_FACING_FRONT
         startCamera()
     }
 
-    //갤러리에서 사진 불러오기
-    fun galleryBtn(view: View) {
-        //binding.gallery.applyClickShrink()
+    private fun startGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.setType("image/*")
         startActivityForResult(intent, OPEN_GALLERY)
@@ -215,39 +191,39 @@ class CameraFragment : Fragment() {
 
             try {
                 cameraProvider.unbindAll()
-
-
                 val cameraControl = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture, imageAnalyzer
                 )
-
-                //seekbar 줌 리스너 추가
-                binding.zoomSeekBar.setOnRubberSeekBarChangeListener(object :
-                    RubberSeekBar.OnRubberSeekBarChangeListener {
-                    override fun onProgressChanged(
-                        seekBar: RubberSeekBar,
-                        value: Int,
-                        fromUser: Boolean
-                    ) {
-                        cameraControl.cameraControl.setLinearZoom(value / 100.toFloat())
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: RubberSeekBar) {
-                        binding.zoomTxt.visibility = View.INVISIBLE
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: RubberSeekBar) {
-                        binding.zoomTxt.visibility = View.VISIBLE
-
-                    }
-                })
-
+                initZoomListener(cameraControl)
 
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    //seekbar 줌 리스너 추가
+    private fun initZoomListener(cameraControl: Camera){
+        binding.zoomSeekBar.setOnRubberSeekBarChangeListener(object :
+            RubberSeekBar.OnRubberSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: RubberSeekBar,
+                value: Int,
+                fromUser: Boolean
+            ) {
+                cameraControl.cameraControl.setLinearZoom(value / 100.toFloat())
+            }
+
+            override fun onStartTrackingTouch(seekBar: RubberSeekBar) {
+                binding.zoomTxt.visibility = View.INVISIBLE
+            }
+
+            override fun onStopTrackingTouch(seekBar: RubberSeekBar) {
+                binding.zoomTxt.visibility = View.VISIBLE
+
+            }
+        })
     }
 
     private fun getOutputDirectory(): File {
@@ -264,8 +240,8 @@ class CameraFragment : Fragment() {
     }
 
 
-    fun locationBtn(view: View) {
-        Toast.makeText(requireContext(), "해당 기능은 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
+    private fun startLocationSettingFragment() {
+        showToast("해당 기능은 사용할 수 없습니다")
         //this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
     }
 

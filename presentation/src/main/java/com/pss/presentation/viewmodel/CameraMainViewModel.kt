@@ -7,20 +7,13 @@ import com.pss.presentation.base.BaseViewModel
 import com.pss.presentation.widget.utils.SingleLiveEvent
 
 class CameraMainViewModel : BaseViewModel() {
-/*    //사진 촬영 버튼 눌렀는지
-    val clickTakePhoto : LiveData<Boolean> get() = _clickTakePhoto
-    private val _clickTakePhoto = MutableLiveData<Boolean>()
-    */
 
     companion object{
         const val EVENT_START_ANALYSIS = 1
+        const val EVENT_START_GALLERY = 2
+        const val EVENT_CHANGE_CAMERA = 3
+        const val EVENT_START_LOCATION_SETTING = 4
     }
-
-    fun startAnalysisActivity() = viewEvent(EVENT_START_ANALYSIS)
-
-    //사진 촬영 버튼 눌렀는지
-    val clickTakePhoto : LiveData<Any> get() = _clickTakePhoto
-    private val _clickTakePhoto = SingleLiveEvent<Any>()
 
     //플래시 불빛 킬건지 설정정
    val cameraFlashLight : LiveData<Boolean> get() = _cameraFlashLight
@@ -31,7 +24,11 @@ class CameraMainViewModel : BaseViewModel() {
         _cameraFlashLight.value = set
     }
 
-    fun setClickTakePhoto(){
-        _clickTakePhoto.call()
-    }
+    fun startAnalysisActivity() = viewEvent(EVENT_START_ANALYSIS)
+
+    fun startGalleryIntent() = viewEvent(EVENT_START_GALLERY)
+
+    fun changeCamera() = viewEvent(EVENT_CHANGE_CAMERA)
+
+    fun startLocationFragment() = viewEvent(EVENT_START_LOCATION_SETTING)
 }
