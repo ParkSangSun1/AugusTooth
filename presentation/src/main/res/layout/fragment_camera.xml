@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="fragment"
             type="com.pss.presentation.view.cameramain.CameraFragment" />
+
+        <variable
+            name="listeners"
+            type="com.pss.presentation.view.cameramain.Listeners" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:onClick="@{fragment::takePhoto}"
+                android:onClick="@{() -> listeners.takePhoto()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -127,31 +132,33 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_centerInParent="true"
                 android:layout_margin="15dp"
-                android:layout_centerInParent="true">
+                android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/setting_btn"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:onClick="@{fragment::settingBtn}"
                     android:layout_marginEnd="10dp"
+                    android:onClick="@{() -> listeners.settingBtn()}"
                     android:padding="5dp"
                     android:src="@drawable/setting" />
+
                 <ImageView
                     android:id="@+id/location_btn"
                     android:layout_width="40dp"
-                    android:onClick="@{fragment::locationBtn}"
                     android:layout_height="40dp"
-                    android:padding="5dp"
                     android:layout_marginEnd="10dp"
+                    android:onClick="@{fragment::locationBtn}"
+                    android:padding="5dp"
                     android:src="@drawable/location" />
 
                 <ImageView
                     android:id="@+id/flashlight_btn"
                     android:layout_width="40dp"
-                    android:onClick="@{fragment::flashLightBtn}"
                     android:layout_height="40dp"
+                    android:onClick="@{() -> listeners.flashLightBtn()}"
                     android:padding="5dp"
                     android:src="@drawable/flashlight_true" />
             </LinearLayout>
@@ -163,13 +170,13 @@
             android:id="@+id/zoomSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
             android:padding="10dp"
             app:dampingRatio="0.3"
             app:defaultThumbInsideColor="#FFF"
             app:defaultThumbRadius="13dp"
             app:elasticBehavior="cubic"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="60dp"
             app:highlightDefaultThumbOnTouchColor="#F98484"
             app:highlightTrackColor="#F98484"
             app:highlightTrackWidth="3dp"

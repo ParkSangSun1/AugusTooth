@@ -28,7 +28,7 @@ class ImageAnalysisFragment : Fragment() {
     private val viewModel by activityViewModels<ImageAnalysisViewModel>()
     private var module: Module? = null
     private lateinit var mutableBitmap: Bitmap
-
+    private lateinit var job: Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class ImageAnalysisFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image_analysis, container, false)
         binding.fragment = this
         observeViewModel()
-        CoroutineScope(Dispatchers.IO).launch {
+        job = CoroutineScope(Dispatchers.IO).launch {
             try {
                 readingImage()
                 loadingModule()
@@ -91,5 +91,11 @@ class ImageAnalysisFragment : Fragment() {
                 binding.layout.visibility = View.INVISIBLE
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("TAG","호출됨 destroy")
+        job.cancel()
     }
 }

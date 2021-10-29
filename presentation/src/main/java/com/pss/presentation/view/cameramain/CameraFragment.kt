@@ -1,6 +1,7 @@
 package com.pss.presentation.view.cameramain
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.FLASH_MODE_OFF
@@ -21,12 +23,12 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.jem.rubberpicker.RubberSeekBar
 import com.pss.presentation.R
 import com.pss.presentation.databinding.FragmentCameraBinding
-import com.pss.presentation.viewmodel.MainViewModel
+import com.pss.presentation.viewmodel.CameraMainViewModel
+import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_START_ANALYSIS
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,12 +45,12 @@ class CameraFragment : Fragment() {
     private val TAG = "로그"
     private val OPEN_GALLERY = 1
     private var camera: Camera? = null
-    private val viewModel by activityViewModels<MainViewModel>()
+    private val viewModel by activityViewModels<CameraMainViewModel>()
+    private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -57,8 +59,10 @@ class CameraFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false)
         binding.fragment = this
+        binding.listeners = Listeners(this, viewModel)
         initColor()
         initCamera()
+        initViewModel()
         observeViewModel()
         startCamera()
         return binding.root
@@ -73,10 +77,11 @@ class CameraFragment : Fragment() {
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    //설정 버튼 클릭
-    fun settingBtn(view: View) {
-        view.findNavController().navigate(R.id.action_cameraFragment_to_cameraAutoFragment)
-    }
+    private fun initViewModel() {
+      /*  viewModel.setClickTakePhoto(false)
+        Log.d("TAG","initVIewModel 호출됨")
+ */   }
+
 
     //플래시 기능 켜져있는지 확인
     private fun checkFlashLightState() {
@@ -84,15 +89,23 @@ class CameraFragment : Fragment() {
         else imageCapture?.flashMode = FLASH_MODE_OFF
     }
 
-    //플래시 버튼 클릭
-    fun flashLightBtn(view: View) {
-        if (viewModel.cameraFlashLight.value!!) viewModel.setCameraFlashLight(false)
-        else viewModel.setCameraFlashLight(true)
-    }
 
     private fun observeViewModel() {
         viewModel.cameraFlashLight.observe(requireActivity(), androidx.lifecycle.Observer {
             checkFlashLightState(it)
+        })
+
+   /*     viewModel.clickTakePhoto.observe(requireActivity(), androidx.lifecycle.Observer {
+            Log.d("TAG","clickTakePhoto : $it")
+            takePhoto()
+        })*/
+        viewModel.viewEvent.observe(requireActivity(),{
+            it.getContentIfNotHandled()?.let { event ->
+                Log.d("TAG","clickTakePhoto : $it")
+                when(event){
+                    EVENT_START_ANALYSIS -> takePhoto()
+                }
+            }
         })
     }
 
@@ -101,9 +114,7 @@ class CameraFragment : Fragment() {
         else binding.flashlightBtn.setImageResource(R.drawable.flashlight_true)
     }
 
-
-    //사진 버튼 클릭
-    fun takePhoto(view: View) {
+    private fun takePhoto() {
 
         checkFlashLightState()
 
@@ -125,21 +136,33 @@ class CameraFragment : Fragment() {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
+                @RequiresApi(Build.VERSION_CODES.P)
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val mediaScanIntent: Intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
                     val contentUri: Uri = Uri.fromFile(photoFile)
                     mediaScanIntent.data = contentUri
                     activity?.sendBroadcast(mediaScanIntent)
 
-                    val bitmap = MediaStore.Images.Media.getBitmap(
-                        requireContext().contentResolver,
-                        contentUri
-                    )
-                    Log.d("TAG","사진 촬용후 bitmap : $bitmap")
-                    this@CameraFragment.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
-
+                    analysisNavController(bitmapConversion(contentUri, false))
                 }
             })
+    }
+
+
+    //sdk < 28 = false, sdk >= 28 = true
+    //bitmap으로 uri변환
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun bitmapConversion(uri: Uri, boolean: Boolean): Bitmap {
+        return if (boolean) MediaStore.Images.Media.getBitmap(
+            requireContext().contentResolver,
+            uri
+        )
+        else ImageDecoder.decodeBitmap(
+            ImageDecoder.createSource(
+                requireContext().contentResolver,
+                uri
+            )
+        )
     }
 
     //전면, 후면 카메라 전환
@@ -241,13 +264,14 @@ class CameraFragment : Fragment() {
     }
 
 
-    fun locationBtn(view: View){
+    fun locationBtn(view: View) {
         Toast.makeText(requireContext(), "해당 기능은 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
         //this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
     }
 
 
     //갤러리에서 사진 선택
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPEN_GALLERY) {
@@ -258,19 +282,11 @@ class CameraFragment : Fragment() {
                 try {
                     currentImageUri?.let {
                         if (Build.VERSION.SDK_INT < 28) {
-                            val bitmap = MediaStore.Images.Media.getBitmap(
-                                requireContext().contentResolver,
-                                currentImageUri
-                            )
-                            this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
+
+                            analysisNavController(bitmapConversion(currentImageUri, false))
                         } else {
-                            val source =
-                                ImageDecoder.createSource(
-                                    requireContext().contentResolver,
-                                    currentImageUri
-                                )
-                            val bitmap = ImageDecoder.decodeBitmap(source)
-                            this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
+
+                            analysisNavController(bitmapConversion(currentImageUri, true))
                         }
                     }
                 } catch (e: Exception) {
@@ -282,8 +298,6 @@ class CameraFragment : Fragment() {
         }
     }
 
+    private fun analysisNavController(bitmap: Bitmap) = this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
 
-    companion object {
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-    }
 }

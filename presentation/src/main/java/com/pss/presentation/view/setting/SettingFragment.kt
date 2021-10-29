@@ -11,10 +11,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.pss.presentation.R
 import com.pss.presentation.databinding.FragmentSettingBinding
-import com.pss.presentation.viewmodel.MainViewModel
+import com.pss.presentation.viewmodel.CameraMainViewModel
 
 class SettingFragment : Fragment() {
-    private val viewModel by activityViewModels<MainViewModel>()
+    private val viewModel by activityViewModels<CameraMainViewModel>()
 
     private lateinit var binding: FragmentSettingBinding
     override fun onCreate(savedInstanceState: Bundle?) {
