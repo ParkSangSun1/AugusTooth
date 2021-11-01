@@ -78,7 +78,6 @@ object NavComponent {
 }
 
 object Library {
-    const val BTN_CLICK_EFFECT = "com.github.realpacific:click-shrink-effect:2.0"
     const val SEEKBAR = "com.github.Chrisvin:RubberPicker:v1.5"
     const val LOTTIE = "com.airbnb.android:lottie:3.4.0"
 }

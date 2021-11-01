@@ -38,6 +38,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
         view.findNavController().popBackStack()
     }
 
+    //뒤로가기 클릭
+    fun opensourceBtn(view: View) {
+        view.findNavController().navigate(R.id.action_cameraAutoFragment_to_openSourceLicenseFragment)
+    }
+
     override fun init() {
         binding.fragment = this
         checkFlashLightState()

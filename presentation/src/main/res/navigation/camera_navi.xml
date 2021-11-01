@@ -44,6 +44,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_cameraAutoFragment_to_openSourceLicenseFragment"
+            app:destination="@id/openSourceLicenseFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/imageAnalysisFragment"
@@ -59,4 +66,9 @@
         android:name="com.pss.presentation.view.setting.LocationFragment"
         tools:layout="@layout/fragment_location"
         android:label="LocationFragment" />
+    <fragment
+        android:id="@+id/openSourceLicenseFragment"
+        tools:layout="@layout/fragment_open_source_license"
+        android:name="com.pss.presentation.view.setting.OpenSourceLicenseFragment"
+        android:label="OpenSourceLicenseFragment" />
 </navigation>

@@ -94,9 +94,6 @@ dependencies {
     implementation (CameraX.CAMERA_VIEW)
     implementation (CameraX.CAMERA_EXTENSIONS)
 
-    //버튼 클릭 이벤트 처리
-    implementation 'com.github.realpacific:click-shrink-effect:2.0'
-
     //seekbar
     implementation 'com.github.Chrisvin:RubberPicker:v1.5'
 
