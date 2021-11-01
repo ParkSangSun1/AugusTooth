@@ -15,9 +15,8 @@ class Listeners(
     private val viewModel: CameraMainViewModel
 ) {
     //설정 버튼 클릭
-    fun settingBtn() {
-        fragment.findNavController().navigate(R.id.action_cameraFragment_to_cameraAutoFragment)
-    }
+    fun settingBtn() = fragment.findNavController().navigate(R.id.action_cameraFragment_to_cameraAutoFragment)
+
 
     //플래시 버튼 클릭
     fun flashLightBtn() {
@@ -25,22 +24,19 @@ class Listeners(
         else viewModel.setCameraFlashLight(true)
     }
 
+
     //사진 촬영 버튼 클릭
-    fun takePhoto() {
-        viewModel.startAnalysisActivity()
-    }
+    fun takePhoto() = viewModel.startAnalysisActivity()
+
 
     //갤러리 버튼 클릭
-    fun galleryBtn() {
-        viewModel.startGalleryIntent()
-    }
+    fun galleryBtn() = viewModel.startGalleryIntent()
+
 
     //전면, 후면 카메라 전환 버튼 클릭
-    fun changeCameraBtn() {
-        viewModel.changeCamera()
-    }
+    fun changeCameraBtn() = viewModel.changeCamera()
 
-    fun locationBtn() {
-        viewModel.startLocationFragment()
-    }
+
+    //위치설정 버튼 클릭
+    fun locationBtn() = viewModel.startLocationFragment()
 }
