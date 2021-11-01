@@ -241,7 +241,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
 
 
     private fun startLocationSettingFragment() {
-        showToast("해당 기능은 사용할 수 없습니다")
+        shortShowToast("해당 기능은 사용할 수 없습니다")
         //this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
     }
 

@@ -31,11 +31,6 @@ class ImageAnalysisFragment :
     private lateinit var mutableBitmap: Bitmap
     private lateinit var job: Job
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onStart() {
         super.onStart()
         viewModel.setAnalysisImageResponse(null)
@@ -80,6 +75,7 @@ class ImageAnalysisFragment :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun init() {
         binding.fragment = this
+        longShowToast("사진을 분석하는데 약 1~2분이 걸릴수 있습니다")
         observeViewModel()
         job = CoroutineScope(Dispatchers.IO).launch {
             try {
