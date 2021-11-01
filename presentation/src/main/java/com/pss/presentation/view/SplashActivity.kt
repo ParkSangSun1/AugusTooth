@@ -18,10 +18,11 @@ import java.lang.Exception
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import com.pss.presentation.base.BaseActivity
+import com.pss.presentation.databinding.ActivitySplashBinding
 
 
-class SplashActivity : AppCompatActivity() {
-
+class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_splash) {
     private var permissionArray = arrayOf(
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -32,25 +33,14 @@ class SplashActivity : AppCompatActivity() {
     private val MULTI_PERMISSION = 999
     var permissionNoRealTime: ArrayList<String> = ArrayList() //실시간 퍼미션 거부된 값을 담는다
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
-
+    override fun init() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(1500)
             checkPermission()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-
-    }
-
     private fun startApp() = this.startActivityWithFinish(this, MainActivity::class.java)
-
 
     private fun checkPermission() {
         try {

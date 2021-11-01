@@ -13,16 +13,16 @@ import com.pss.presentation.viewmodel.CameraMainViewModel
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel by viewModels<CameraMainViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun init() {
         binding.apply {
             activity = this@MainActivity
         }
-
         initViewModel()
     }
 
     private fun initViewModel(){
         viewModel.setCameraFlashLight(false)
     }
+
+
 }
