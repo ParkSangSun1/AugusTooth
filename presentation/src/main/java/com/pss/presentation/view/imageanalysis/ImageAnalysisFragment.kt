@@ -17,14 +17,15 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.pss.presentation.base.BaseFragment
 import com.pss.presentation.viewmodel.ImageAnalysisViewModel
 import kotlinx.coroutines.*
 import org.pytorch.*
 
 
-class ImageAnalysisFragment : Fragment() {
+class ImageAnalysisFragment :
+    BaseFragment<FragmentImageAnalysisBinding>(R.layout.fragment_image_analysis) {
     private val args by navArgs<ImageAnalysisFragmentArgs>()
-    private lateinit var binding: FragmentImageAnalysisBinding
     private val viewModel by activityViewModels<ImageAnalysisViewModel>()
     private var module: Module? = null
     private lateinit var mutableBitmap: Bitmap
@@ -41,11 +42,43 @@ class ImageAnalysisFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image_analysis, container, false)
+    private suspend fun readingImage() {
+        mutableBitmap = args.imageBitmap.copy(Bitmap.Config.RGBA_F16, true)
+    }
+
+    private suspend fun loadingModule() {
+        module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))
+
+    }
+
+    fun backBtn(view: View) {
+        this.findNavController().popBackStack()
+    }
+
+    private fun observeViewModel() {
+        viewModel.analysisImageResponse.observe(requireActivity(), Observer {
+            if (it != null) {
+                binding.imageView.visibility = View.GONE
+                binding.layout.visibility = View.VISIBLE
+                binding.resultTxt.text = when (viewModel.analysisImageResponse.value) {
+                    0 -> "교정이 필요하지 않습니다"
+                    1 -> "교정이 필요합니다"
+                    else -> "분석에 실패했습니다"
+                }
+            } else {
+                binding.imageView.visibility = View.VISIBLE
+                binding.layout.visibility = View.INVISIBLE
+            }
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun init() {
         binding.fragment = this
         observeViewModel()
         job = CoroutineScope(Dispatchers.IO).launch {
@@ -58,44 +91,5 @@ class ImageAnalysisFragment : Fragment() {
             }
 
         }
-        return binding.root
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun readingImage() {
-        mutableBitmap = args.imageBitmap.copy(Bitmap.Config.RGBA_F16, true)
-    }
-
-    private suspend fun loadingModule(){
-        module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))
-
-    }
-
-    fun backBtn(view: View){
-        this.findNavController().popBackStack()
-    }
-
-    private fun observeViewModel() {
-        viewModel.analysisImageResponse.observe(requireActivity(), Observer {
-            if (it != null) {
-                binding.imageView.visibility = View.GONE
-                binding.layout.visibility = View.VISIBLE
-                binding.resultTxt.text = when(viewModel.analysisImageResponse.value){
-                    0 -> "교정이 필요하지 않습니다"
-                    1 -> "교정이 필요합니다"
-                    else -> "분석에 실패했습니다"
-                }
-            }
-            else {
-                binding.imageView.visibility = View.VISIBLE
-                binding.layout.visibility = View.INVISIBLE
-            }
-        })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("TAG","호출됨 destroy")
-        job.cancel()
     }
 }

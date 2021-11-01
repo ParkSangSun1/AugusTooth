@@ -10,37 +10,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.pss.presentation.R
+import com.pss.presentation.base.BaseFragment
 import com.pss.presentation.databinding.FragmentSettingBinding
 import com.pss.presentation.viewmodel.CameraMainViewModel
 
-class SettingFragment : Fragment() {
+class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
     private val viewModel by activityViewModels<CameraMainViewModel>()
-
-    private lateinit var binding: FragmentSettingBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false)
-        binding.fragment = this
-
-
-        checkFlashLightState()
-
-
-        return binding.root
-    }
 
     private fun checkFlashLightState() {
         if (viewModel.cameraFlashLight.value!!) binding.flashlightState.text = "켜짐"
         else binding.flashlightState.text = "꺼짐"
     }
-
 
     fun cameraFlashLightBtn(view: View) {
         if (viewModel.cameraFlashLight.value!!) viewModel.setCameraFlashLight(false)
@@ -56,5 +36,10 @@ class SettingFragment : Fragment() {
     //뒤로가기 클릭
     fun backBtn(view: View) {
         view.findNavController().popBackStack()
+    }
+
+    override fun init() {
+        binding.fragment = this
+        checkFlashLightState()
     }
 }

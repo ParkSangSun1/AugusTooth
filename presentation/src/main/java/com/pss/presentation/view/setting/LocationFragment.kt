@@ -8,27 +8,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.pss.presentation.R
+import com.pss.presentation.base.BaseFragment
 import com.pss.presentation.databinding.FragmentLocationBinding
 
-class LocationFragment : Fragment() {
-    private lateinit var binding : FragmentLocationBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_location,container,false)
-        binding.fragment = this
-        return binding.root
-    }
+class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment_location) {
 
     //뒤로가기 클릭
     fun backBtn(view: View){
         view.findNavController().popBackStack()
+    }
+
+    override fun init() {
+        binding.fragment = this
     }
 }
