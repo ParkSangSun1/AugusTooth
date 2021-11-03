@@ -1,8 +1,9 @@
 package com.pss.data.repository
 
-import com.pss.data.model.kakao.response.SearchAddress
+import com.pss.domain.model.kakao.response.SearchAddress
 import com.pss.data.repository.datasource.KakaoAddressDataSource
 import com.pss.domain.repository.KakaoAddressRepository
+import retrofit2.Response
 import javax.inject.Inject
 
 class KakaoAddressRepositoryImpl @Inject constructor(
@@ -14,5 +15,5 @@ class KakaoAddressRepositoryImpl @Inject constructor(
         page: Int,
         size: Int,
         query: String
-    ): List<SearchAddress>  = kakaoAddressDataSource.searchAddress(Authorization, analyze_type, page, size, query)
+    ): Response<SearchAddress>  = kakaoAddressDataSource.searchAddress(Authorization, analyze_type, page, size, query)
 }

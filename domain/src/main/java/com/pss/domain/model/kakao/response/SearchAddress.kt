@@ -1,4 +1,4 @@
-package com.pss.data.model.kakao.response
+package com.pss.domain.model.kakao.response
 
 import com.pss.data.model.kakao.response.item.Document
 import com.pss.data.model.kakao.response.item.Meta

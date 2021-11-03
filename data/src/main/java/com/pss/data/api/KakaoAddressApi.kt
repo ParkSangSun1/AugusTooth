@@ -1,6 +1,6 @@
 package com.pss.data.api
 
-import com.pss.data.model.kakao.response.SearchAddress
+import com.pss.domain.model.kakao.response.SearchAddress
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -15,5 +15,5 @@ interface KakaoAddressApi {
         @Query("size") size: Int,
         @Query("query") query: String
 
-    ) : List<SearchAddress>
+    ) : Response<SearchAddress>
 }
