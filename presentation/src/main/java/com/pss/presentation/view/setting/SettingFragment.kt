@@ -9,10 +9,12 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.pss.presentation.R
 import com.pss.presentation.base.BaseFragment
 import com.pss.presentation.databinding.FragmentSettingBinding
 import com.pss.presentation.viewmodel.CameraMainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
     private val viewModel by activityViewModels<CameraMainViewModel>()
@@ -29,8 +31,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     fun locationBtn(view: View) {
-        Toast.makeText(requireContext(), "해당 기능은 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
-        // this.findNavController().navigate(R.id.action_cameraAutoFragment_to_locationFragment)
+        //Toast.makeText(requireContext(), "해당 기능은 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
+         this.findNavController().navigate(R.id.action_cameraAutoFragment_to_locationFragment)
     }
 
     //뒤로가기 클릭

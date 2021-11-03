@@ -1,7 +1,7 @@
 package com.pss.augustooth.di
 
 import com.pss.data.api.KakaoAddressApi
-import com.pss.presentation.widget.utils.ApiUrl.HOSPITAL_LOCATION_BASE_URL
+import com.pss.presentation.widget.utils.ApiUrl.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,7 +36,7 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(HOSPITAL_LOCATION_BASE_URL)
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             //json 변화기 Factory
             .client(provideHttpClient())

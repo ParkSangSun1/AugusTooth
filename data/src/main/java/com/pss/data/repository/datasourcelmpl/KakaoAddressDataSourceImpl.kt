@@ -1,8 +1,8 @@
 package com.pss.data.repository.datasourcelmpl
 
 import com.pss.data.api.KakaoAddressApi
-import com.pss.domain.model.kakao.response.SearchAddress
 import com.pss.data.repository.datasource.KakaoAddressDataSource
+import com.pss.domain.model.kakao.response.SearchAddress
 import retrofit2.Response
 import javax.inject.Inject
 

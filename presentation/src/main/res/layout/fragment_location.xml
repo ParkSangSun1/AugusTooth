@@ -13,7 +13,7 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.setting.LocationFragment">
+        >
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,6 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/location_margin"
                 android:layout_marginTop="100dp"
+                android:onClick="@{fragment::clickAddressSearchBtn}"
                 android:elevation="5dp"
                 android:layout_marginEnd="@dimen/location_margin"
                 android:background="@drawable/location_btn"
