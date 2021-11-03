@@ -1,5 +1,6 @@
-package com.pss.presentation.di
+package com.pss.augustooth.di
 
+import com.pss.data.api.KakaoAddressApi
 import com.pss.presentation.widget.utils.ApiUrl.HOSPITAL_LOCATION_BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -49,6 +50,11 @@ object NetworkModule {
         return GsonConverterFactory.create()
     }
 
+    @Provides
+    @Singleton
+    fun provideKakaoAddressApiService(retrofit: Retrofit): KakaoAddressApi {
+        return retrofit.create(KakaoAddressApi::class.java)
+    }
 /*
     @Provides
     @Singleton
