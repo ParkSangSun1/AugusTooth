@@ -67,4 +67,7 @@ dependencies {
     //okHttp
     implementation (OkHttp.OKHTTP)
     implementation (OkHttp.LOGGING_INTERCEPTOR)
+
+    //datastore
+    implementation (AndroidX.DATASTORE)
 }

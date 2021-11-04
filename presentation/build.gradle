@@ -110,4 +110,7 @@ dependencies {
     //pytorch
     implementation 'org.pytorch:pytorch_android_lite:1.9.0'
     implementation "org.pytorch:pytorch_android_torchvision:1.9.0"
+
+    //datastore
+    implementation (AndroidX.DATASTORE)
 }
