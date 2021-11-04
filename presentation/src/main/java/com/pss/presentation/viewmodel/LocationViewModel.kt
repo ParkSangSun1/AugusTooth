@@ -20,7 +20,6 @@ import javax.inject.Inject
 class LocationViewModel @Inject constructor(
     private val addressUseCase: SearchAddressUseCase,
     private val dataStore: DataStoreModule
-
 ) : BaseViewModel() {
 
     val searchAddressResponse: LiveData<DomainKakaoAddress> get() = _searchAddressResponse
@@ -49,7 +48,6 @@ class LocationViewModel @Inject constructor(
         return location
     }
 
-
     fun searchAddress(
         Authorization: String,
         analyze_type: String,
@@ -61,16 +59,12 @@ class LocationViewModel @Inject constructor(
             addressUseCase.execute(Authorization, analyze_type, page, size, query)
                 .let { response ->
                     try {
-
                         _searchAddressResponse.value = response
                         viewEvent("SUCCESS")
                     } catch (e: Exception) {
                         viewEvent("ERROR")
                     }
-                    Log.d("TAG", "Response : $response")
-
                 }
         }
     }
-
 }
