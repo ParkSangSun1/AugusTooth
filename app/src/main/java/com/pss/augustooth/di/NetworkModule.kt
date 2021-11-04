@@ -40,7 +40,7 @@ object NetworkModule {
             .client(okHttpClient)
             //json 변화기 Factory
             .client(provideHttpClient())
-            .addConverterFactory(JaxbConverterFactory.create())
+            .addConverterFactory(gsonConverterFactory)
             .build()
     }
 

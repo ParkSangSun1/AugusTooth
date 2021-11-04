@@ -20,7 +20,6 @@ import com.pss.presentation.viewmodel.LocationViewModel
 import com.pss.presentation.widget.utils.ApiUrl.KEY
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment_location) {
     private val viewModel by activityViewModels<LocationViewModel>()
 
@@ -37,6 +36,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
     private fun observeViewModel() {
         viewModel.viewEvent.observe(requireActivity(), {
             it.getContentIfNotHandled()?.let { event ->
+                Log.d("TAG","Event : $event")
                 when (event) {
                     "SUCCESS" -> Log.d("TAG", "${viewModel.searchAddressResponse.value}")
                     "ERROR" -> Toast.makeText(requireContext(), "오류가 발생했습니다", Toast.LENGTH_SHORT).show()

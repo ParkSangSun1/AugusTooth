@@ -8,8 +8,9 @@ import androidx.databinding.DataBindingUtil
 import com.pss.presentation.base.BaseActivity
 import com.pss.presentation.databinding.ActivityMainBinding
 import com.pss.presentation.viewmodel.CameraMainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel by viewModels<CameraMainViewModel>()
 

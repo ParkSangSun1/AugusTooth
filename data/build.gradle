@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation project(":domain")
+    implementation project(':domain')
 
     implementation (KTX.CORE)
     implementation (AndroidX.APP_COMPAT)

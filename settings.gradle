@@ -12,5 +12,5 @@ dependencyResolutionManagement {
 rootProject.name = "AugusTooth"
 include ':app'
 include ':presentation'
-include ':domain'
 include ':data'
+include ':domain'
