@@ -63,9 +63,10 @@
     </fragment>
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.pss.presentation.view.setting.LocationFragment"
+        android:name="com.pss.presentation.view.setting.location.LocationFragment"
         tools:layout="@layout/fragment_location"
-        android:label="LocationFragment" />
+        android:label="LocationFragment" >
+    </fragment>
     <fragment
         android:id="@+id/openSourceLicenseFragment"
         tools:layout="@layout/fragment_open_source_license"

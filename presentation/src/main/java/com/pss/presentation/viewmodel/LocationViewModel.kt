@@ -18,12 +18,17 @@ class LocationViewModel @Inject constructor(
     private val addressUseCase: SearchAddressUseCase
 ) : BaseViewModel() {
 
-    companion object{
-        const val SEARCH_ADDRESS_RESPONSE = 0
-    }
+    val searchAddressResponse: LiveData<DomainKakaoAddress> get() = _searchAddressResponse
+    private val _searchAddressResponse = MutableLiveData<DomainKakaoAddress>()
 
-    val searchAddressResponse : LiveData<Response<DomainKakaoAddress>> get() = _searchAddressResponse
-    private val _searchAddressResponse = MutableLiveData<Response<DomainKakaoAddress>>()
+    //사용자가 최종적으로 선택한(Dialog에서) 위치
+    val userChoiceLocation: LiveData<String> get() = _userChoiceLocation
+    private val _userChoiceLocation = MutableLiveData<String>()
+
+
+    fun setUserChoiceLocation(set : String) {
+        _userChoiceLocation.value = set
+    }
 
     fun searchAddress(
         Authorization: String,
@@ -32,26 +37,20 @@ class LocationViewModel @Inject constructor(
         size: Int,
         query: String
     ) {
-        Log.d("TAG","Response : 들어옴1")
-
         viewModelScope.launch {
-            Log.d("TAG","Response : 들어옴2")
-         /*   try {
-                Log.d("TAG","Response : 들어옴3")
-*/
-                addressUseCase.execute(Authorization, analyze_type, page, size, query)
-                    .let { response ->
-                        Log.d("TAG","Response : $response")
-                     /*   if (response.){
-                            _searchAddressResponse.value = response
-                            viewEvent("SUCCESS")
-                        }
-                        else
-                            viewEvent("ERROR")*/
+            addressUseCase.execute(Authorization, analyze_type, page, size, query)
+                .let { response ->
+                    try {
+
+                        _searchAddressResponse.value = response
+                        viewEvent("SUCCESS")
+                    } catch (e: Exception) {
+                        viewEvent("ERROR")
                     }
-         /*   } catch (e: Exception) {
-                viewEvent("ERROR")
-            }*/
+                    Log.d("TAG", "Response : $response")
+
+                }
         }
     }
+
 }

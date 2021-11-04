@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="dialog"
+            type="com.pss.presentation.view.setting.location.LocationDialogFragment" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#ffffff"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:fontFamily="@font/spoqahansansneo_bold"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:text="사용자 위치 설정" />
+
+            <TextView
+                android:id="@+id/user_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginBottom="40dp"
+                android:fontFamily="@font/spoqahansansneo_medium"
+                android:paddingHorizontal="10dp"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:text="사용자의 위치 표시" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/not_choice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:onClick="@{dialog::clickNotChoiceBtn}"
+                    android:background="#C8C8C8"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:text="다시선택" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/choice"
+                    android:layout_width="0dp"
+                    android:onClick="@{dialog::clickChoiceBtn}"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#34B8FF"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:text="선택" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>
