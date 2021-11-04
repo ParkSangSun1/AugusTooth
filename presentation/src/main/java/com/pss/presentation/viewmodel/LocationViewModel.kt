@@ -7,7 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.pss.domain.model.kakao.response.DomainKakaoAddress
 import com.pss.domain.usecase.SearchAddressUseCase
 import com.pss.presentation.base.BaseViewModel
+import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
+import com.pss.presentation.widget.utils.DataStoreModule
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Response
@@ -15,7 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LocationViewModel @Inject constructor(
-    private val addressUseCase: SearchAddressUseCase
+    private val addressUseCase: SearchAddressUseCase,
+    private val dataStore: DataStoreModule
+
 ) : BaseViewModel() {
 
     val searchAddressResponse: LiveData<DomainKakaoAddress> get() = _searchAddressResponse
@@ -26,9 +31,24 @@ class LocationViewModel @Inject constructor(
     private val _userChoiceLocation = MutableLiveData<String>()
 
 
-    fun setUserChoiceLocation(set : String) {
+    fun setUserChoiceLocation(set: String) {
         _userChoiceLocation.value = set
     }
+
+    fun saveLocationInDataStore() = viewModelScope.launch {
+        dataStore.setLocation(_userChoiceLocation.value.toString())
+    }
+
+    fun setViewEventNull() = viewEvent("NULL")
+
+    fun readLocationInDataStore() : String {
+        var location : String = DEFAULT_LOCATION
+        viewModelScope.launch {
+           location =  dataStore.readLocation.first()
+        }
+        return location
+    }
+
 
     fun searchAddress(
         Authorization: String,

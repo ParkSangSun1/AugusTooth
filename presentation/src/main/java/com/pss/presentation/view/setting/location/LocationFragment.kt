@@ -14,6 +14,7 @@ import com.pss.presentation.viewmodel.LocationViewModel
 import com.pss.presentation.widget.utils.ApiUrl.KEY
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
 
 
 class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment_location) {
@@ -26,7 +27,15 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
 
     override fun init() {
         binding.fragment = this
+        if (viewModel.readLocationInDataStore() != DEFAULT_LOCATION)
+            binding.query.setText(viewModel.readLocationInDataStore())
+        viewModel.setViewEventNull()
         observeViewModel()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.setViewEventNull()
     }
 
     //Log.d("TAG", "${viewModel.searchAddressResponse.value!!.documents[0].address.region_1depth_name}")
@@ -38,27 +47,32 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
                     "SUCCESS" -> {
                         Log.d("TAG", "SUCCESS")
                         startDialog()
+                        viewModel.setViewEventNull()
                     }
                     "ERROR" -> shortShowToast("오류가 발생했습니다")
+                    "NULL" -> Log.d("TAG","Event : null")
                 }
             }
         })
 
         viewModel.userChoiceLocation.observe(requireActivity(), Observer {
-            Log.d("TAG","사용자가 선택한 위치 : $it")
+            Log.d("TAG", "사용자가 선택한 위치 : $it")
+            viewModel.saveLocationInDataStore()
         })
     }
 
     private fun startDialog() {
         val args = Bundle()
-        if (viewModel.searchAddressResponse.value?.meta?.pageable_count != 0){
-            val location = "${viewModel.searchAddressResponse.value!!.documents[0].address.region_1depth_name} ${viewModel.searchAddressResponse.value!!.documents[0].address.region_2depth_name} ${viewModel.searchAddressResponse.value!!.documents[0].address.region_3depth_name}"
-            Log.d("TAG","선택 위치 : $location")
+        Log.d("TAG","startDialog : ${viewModel.searchAddressResponse.value?.meta?.pageable_count}")
+        if (viewModel.searchAddressResponse.value?.meta?.pageable_count != 0) {
+            val location =
+                "${viewModel.searchAddressResponse.value!!.documents[0].address.region_1depth_name} ${viewModel.searchAddressResponse.value!!.documents[0].address.region_2depth_name} ${viewModel.searchAddressResponse.value!!.documents[0].address.region_3depth_name}"
+            Log.d("TAG", "선택 위치 : $location")
             args.putString("location", location)
             val dialog = LocationDialogFragment()
             dialog.arguments = args
             dialog.show(parentFragmentManager, "locatingDialog")
-        }else shortShowToast("검색한 주소의 값이 없습니다")
+        } else shortShowToast("검색한 주소의 값이 없습니다")
     }
 
     fun clickAddressSearchBtn(view: View) {
