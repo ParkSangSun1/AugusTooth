@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="fragment"
             type="com.pss.presentation.view.setting.OpenSourceLicenseFragment" />
@@ -30,9 +31,9 @@
                 android:id="@+id/imageView"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:onClick="@{fragment::backBtn}"
                 android:padding="10dp"
                 android:src="@drawable/back"
-                android:onClick="@{fragment::backBtn}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -183,7 +184,53 @@ https://github.com/tensorflow \n"
                     android:layout_height="1dp"
                     android:layout_marginTop="20dp"
                     android:background="@color/line" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/spoqahansansneo_medium"
+                        android:gravity="start"
+                        android:text="Lottie"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoLink="web"
+                        android:fontFamily="@font/spoqahansansneo_medium"
+                        android:text="Sifat Ullah Shah on LottieFiles: https://lottiefiles.com/68215-location-icon\nMartin Simeonov on LottieFiles: https://lottiefiles.com/36878-clean-tooth\nAly Mohamed on LottieFiles: https://lottiefiles.com/61441-data-analysis-01"
+                        android:textColor="@color/gray"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/line" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/spoqahansansneo_medium"
+                    android:gravity="start"
+                    android:layout_marginTop="20dp"
+                    android:text="모든 기여자 분들에게 감사의 말씀드립니다!"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
             </LinearLayout>
+
 
         </androidx.core.widget.NestedScrollView>
 
