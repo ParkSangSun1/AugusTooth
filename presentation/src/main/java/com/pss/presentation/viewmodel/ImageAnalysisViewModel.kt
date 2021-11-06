@@ -3,14 +3,22 @@ package com.pss.presentation.viewmodel
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.*
+import com.pss.presentation.widget.utils.DataStore
+import com.pss.presentation.widget.utils.DataStoreModule
 import com.pss.presentation.widget.utils.Utils.outputResultComparison
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.pytorch.*
 import org.pytorch.torchvision.TensorImageUtils
+import javax.inject.Inject
 
-class ImageAnalysisViewModel() : ViewModel() {
+@HiltViewModel
+class ImageAnalysisViewModel @Inject constructor(
+    private val dataStore: DataStoreModule
+) : ViewModel() {
     val imageBitmap: LiveData<Bitmap> get() = _imageBitmap
     private val _imageBitmap = MutableLiveData<Bitmap>()
 
@@ -32,6 +40,11 @@ class ImageAnalysisViewModel() : ViewModel() {
         _analysisImageResponse.value = response
     }
 
+    suspend fun readLocationInDataStore() : String {
+        var location : String = DataStore.DEFAULT_LOCATION
+        location =  dataStore.readLocation.first()
+        return location
+    }
 
     fun analysisImage(bitmap: Bitmap, module: Module?) = viewModelScope.launch {
         var scores : FloatArray? = null
@@ -50,7 +63,6 @@ class ImageAnalysisViewModel() : ViewModel() {
             }
         }
         _analysisImageResponse.value = scores?.let { outputResultComparison(it) }
-
     }
 
     private suspend fun preparingInput(bitmap: Bitmap) = TensorImageUtils.bitmapToFloat32Tensor( bitmap, MY_TORCHVISION_NORM_MEAN_RGB, MY_TORCHVISION_NORM_STD_RGB, MemoryFormat.CHANNELS_LAST)

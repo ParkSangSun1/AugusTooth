@@ -1,6 +1,8 @@
 package com.pss.presentation.view.imageanalysis
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -48,6 +50,18 @@ class ImageAnalysisFragment :
 
     fun backBtn(view: View) {
         this.findNavController().popBackStack()
+    }
+
+    fun seeNearbyDentist(view: View){
+       // startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.kr/maps/place/광주광역시 남구 월산동 치과")))
+        CoroutineScope(Dispatchers.IO).launch {
+            val location = viewModel.readLocationInDataStore()
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            intent.data = Uri.parse("geo:0,0?q=${location} 치과")
+            startActivity(intent)
+        }
+
     }
 
     private fun observeViewModel() {

@@ -116,6 +116,7 @@
                     android:text="주변 치과 찾아보기"
                     android:gravity="center"
                     android:layout_marginTop="70dp"
+                    android:onClick="@{fragment::seeNearbyDentist}"
                     android:layout_marginBottom="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
