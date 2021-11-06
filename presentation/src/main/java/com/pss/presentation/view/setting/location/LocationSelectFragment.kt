@@ -15,7 +15,7 @@ import com.pss.presentation.view.imageanalysis.ImageAnalysisFragmentArgs
 import com.pss.presentation.viewmodel.LocationViewModel
 
 class LocationSelectFragment : BaseFragment<FragmentLocationSelectBinding>(R.layout.fragment_location_select) {
-    private val args by navArgs<LocationSelectFragmentArgs>()
+    //private val args by navArgs<LocationSelectFragmentArgs>()
    // private val viewModel by activityViewModels<LocationViewModel>()
 
     override fun init() {
@@ -24,15 +24,15 @@ class LocationSelectFragment : BaseFragment<FragmentLocationSelectBinding>(R.lay
     }
 
     private fun initText(){
-        binding.userLocation.text = args.location
+        //binding.userLocation.text = args.location
     }
 
-    fun clickChoiceBtn(view: View) {
+/*    fun clickChoiceBtn(view: View) {
         //viewModel.setUserChoiceLocation(args.location)
-        this.findNavController().popBackStack()
+        this@LocationSelectFragment.findNavController().popBackStack()
     }
 
     fun clickNotChoiceBtn(view: View) {
-        this.findNavController().popBackStack()
-    }
+        this@LocationSelectFragment.findNavController().popBackStack()
+    }*/
 }

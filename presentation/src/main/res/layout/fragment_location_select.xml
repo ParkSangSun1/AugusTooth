@@ -57,7 +57,7 @@
                 android:textSize="16sp"
                 android:text="사용자의 위치 표시" />
 
-            <androidx.appcompat.widget.AppCompatButton
+          <!--  <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                 android:textColor="@color/white"
                 android:background="@drawable/location_select_not_choice"
                 android:text="다시 선택하기"
-                />
+                />-->
         </LinearLayout>
 
 
