@@ -26,11 +26,10 @@ abstract class BaseDialogFragment<B : ViewDataBinding>(
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // binding.lifecycleOwner = this
-    }
+    override fun onDestroyView() {
+        super.onDestroyView()
 
+    }
     abstract fun init()
 
 }

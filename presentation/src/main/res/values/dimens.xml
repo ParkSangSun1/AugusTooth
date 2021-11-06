@@ -3,4 +3,5 @@
     <dimen name="bottom_bar_padding_end_bottom">50dp</dimen>
     <dimen name="circle_btn_size">70dp</dimen>
     <dimen name="location_margin">20dp</dimen>
+    <dimen name="location_select_btn_margin">40dp</dimen>
 </resources>

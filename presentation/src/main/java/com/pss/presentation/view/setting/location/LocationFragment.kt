@@ -3,7 +3,6 @@ package com.pss.presentation.view.setting.location
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -15,6 +14,10 @@ import com.pss.presentation.widget.utils.ApiUrl.KEY
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment_location) {
@@ -27,18 +30,25 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
 
     override fun init() {
         binding.fragment = this
-        if (viewModel.readLocationInDataStore() != DEFAULT_LOCATION)
-            binding.query.setText(viewModel.readLocationInDataStore())
-        viewModel.setViewEventNull()
+        initViewModel()
+        initText()
         observeViewModel()
     }
 
-    override fun onStop() {
-        super.onStop()
+    private fun initViewModel(){
         viewModel.setViewEventNull()
+        viewModel.setSearchAddressResponse(null)
     }
 
-    //Log.d("TAG", "${viewModel.searchAddressResponse.value!!.documents[0].address.region_1depth_name}")
+    private fun initText(){
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.Main){
+                if (viewModel.readLocationInDataStore() != DEFAULT_LOCATION)
+                    binding.query.setText(viewModel.readLocationInDataStore())
+            }
+        }
+    }
+
     private fun observeViewModel() {
         viewModel.viewEvent.observe(requireActivity(), {
             it.getContentIfNotHandled()?.let { event ->
@@ -46,11 +56,10 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
                 when (event) {
                     "SUCCESS" -> {
                         Log.d("TAG", "SUCCESS")
-                        startDialog()
+                        startLocationSelectFragment()
                         viewModel.setViewEventNull()
                     }
                     "ERROR" -> shortShowToast("오류가 발생했습니다")
-                    "NULL" -> Log.d("TAG","Event : null")
                 }
             }
         })
@@ -61,17 +70,14 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         })
     }
 
-    private fun startDialog() {
-        val args = Bundle()
-        Log.d("TAG","startDialog : ${viewModel.searchAddressResponse.value?.meta?.pageable_count}")
+    private fun startLocationSelectFragment() {
+        Log.d("TAG","LocationSelectFramgent 함수1")
         if (viewModel.searchAddressResponse.value?.meta?.pageable_count != 0) {
             val location =
                 "${viewModel.searchAddressResponse.value!!.documents[0].address.region_1depth_name} ${viewModel.searchAddressResponse.value!!.documents[0].address.region_2depth_name} ${viewModel.searchAddressResponse.value!!.documents[0].address.region_3depth_name}"
-            Log.d("TAG", "선택 위치 : $location")
-            args.putString("location", location)
-            val dialog = LocationDialogFragment()
-            dialog.arguments = args
-            dialog.show(parentFragmentManager, "locatingDialog")
+            Log.d("TAG","LocationSelectFramgent 함수2")
+            this.findNavController().navigate(LocationFragmentDirections.actionLocationFragmentToLocationSelectFragment(location))
+
         } else shortShowToast("검색한 주소의 값이 없습니다")
     }
 

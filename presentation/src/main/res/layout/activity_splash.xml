@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqahansansneo_medium"
             android:text="AI 치아상태 자가진단"
-            android:textColor="#52B84A"
+            android:textColor="@color/main_color"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="@+id/textView4"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />

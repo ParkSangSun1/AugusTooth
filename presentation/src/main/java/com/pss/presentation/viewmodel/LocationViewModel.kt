@@ -21,14 +21,17 @@ class LocationViewModel @Inject constructor(
     private val addressUseCase: SearchAddressUseCase,
     private val dataStore: DataStoreModule
 ) : BaseViewModel() {
-
-    val searchAddressResponse: LiveData<DomainKakaoAddress> get() = _searchAddressResponse
-    private val _searchAddressResponse = MutableLiveData<DomainKakaoAddress>()
+    val searchAddressResponse: LiveData<DomainKakaoAddress?> get() = _searchAddressResponse
+    private val _searchAddressResponse = MutableLiveData<DomainKakaoAddress?>()
 
     //사용자가 최종적으로 선택한(Dialog에서) 위치
     val userChoiceLocation: LiveData<String> get() = _userChoiceLocation
     private val _userChoiceLocation = MutableLiveData<String>()
 
+
+    fun setSearchAddressResponse(set : DomainKakaoAddress?){
+        _searchAddressResponse.value = set
+    }
 
     fun setUserChoiceLocation(set: String) {
         _userChoiceLocation.value = set
@@ -40,11 +43,11 @@ class LocationViewModel @Inject constructor(
 
     fun setViewEventNull() = viewEvent("NULL")
 
-    fun readLocationInDataStore() : String {
+    suspend fun readLocationInDataStore() : String {
         var location : String = DEFAULT_LOCATION
-        viewModelScope.launch {
+       // viewModelScope.launch {
            location =  dataStore.readLocation.first()
-        }
+       // }
         return location
     }
 
