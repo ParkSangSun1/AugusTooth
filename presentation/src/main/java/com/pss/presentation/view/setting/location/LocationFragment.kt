@@ -1,5 +1,12 @@
 package com.pss.presentation.view.setting.location
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -12,12 +19,17 @@ import com.pss.presentation.databinding.FragmentLocationBinding
 import com.pss.presentation.viewmodel.LocationViewModel
 import com.pss.presentation.widget.utils.ApiUrl.KEY
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
 import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.util.*
 
 
 class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment_location) {
@@ -32,13 +44,17 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         binding.fragment = this
         //initViewModel()
         //initText()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         observeViewModel()
     }
 
-    private fun initViewModel() {
+/*    private fun initViewModel() {
         viewModel.setViewEventNull()
         viewModel.setSearchAddressResponse(null)
-    }
+    }*/
 
 /*    private fun initText(){
         CoroutineScope(Dispatchers.IO).launch {
