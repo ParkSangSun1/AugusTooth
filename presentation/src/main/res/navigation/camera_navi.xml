@@ -43,7 +43,8 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_cameraAutoFragment_to_openSourceLicenseFragment"
             app:destination="@id/openSourceLicenseFragment"
@@ -51,6 +52,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_cameraAutoFragment_to_ATestFragment"
+            app:destination="@id/ATestFragment" />
     </fragment>
     <fragment
         android:id="@+id/imageAnalysisFragment"
@@ -72,7 +76,8 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/openSourceLicenseFragment"
@@ -89,4 +94,18 @@
             app:argType="string"
             android:defaultValue="예기치 않은 오류가 발생했습니다" />
     </fragment>
+    <fragment
+        android:id="@+id/ATestFragment"
+        tools:layout="@layout/fragment_a_test"
+        android:name="com.pss.presentation.view.setting.location.test.ATestFragment"
+        android:label="ATestFragment" >
+        <action
+            android:id="@+id/action_ATestFragment_to_BTestFragment"
+            app:destination="@id/BTestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/BTestFragment"
+        android:name="com.pss.presentation.view.setting.location.test.BTestFragment"
+        android:label="fragment_b_test"
+        tools:layout="@layout/fragment_b_test" />
 </navigation>

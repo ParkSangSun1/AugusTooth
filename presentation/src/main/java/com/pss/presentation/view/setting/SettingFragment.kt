@@ -33,6 +33,10 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     fun locationBtn(view: View) {
         //Toast.makeText(requireContext(), "해당 기능은 사용할 수 없습니다", Toast.LENGTH_SHORT).show()
          this.findNavController().navigate(R.id.action_cameraAutoFragment_to_locationFragment)
+
+        //현재 테스트 중
+       // this.findNavController().navigate(R.id.action_cameraAutoFragment_to_ATestFragment)
+
     }
 
     //뒤로가기 클릭

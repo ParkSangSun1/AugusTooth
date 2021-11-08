@@ -9,6 +9,8 @@ import com.pss.domain.usecase.SearchAddressUseCase
 import com.pss.presentation.base.BaseViewModel
 import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
 import com.pss.presentation.widget.utils.DataStoreModule
+import com.pss.presentation.widget.utils.Event
+import com.pss.presentation.widget.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,17 +23,14 @@ class LocationViewModel @Inject constructor(
     private val addressUseCase: SearchAddressUseCase,
     private val dataStore: DataStoreModule
 ) : BaseViewModel() {
+
     val searchAddressResponse: LiveData<DomainKakaoAddress?> get() = _searchAddressResponse
-    private val _searchAddressResponse = MutableLiveData<DomainKakaoAddress?>()
+    private val _searchAddressResponse = SingleLiveEvent<DomainKakaoAddress?>()
 
     //사용자가 최종적으로 선택한(Dialog에서) 위치
     val userChoiceLocation: LiveData<String> get() = _userChoiceLocation
     private val _userChoiceLocation = MutableLiveData<String>()
 
-
-    fun setSearchAddressResponse(set : DomainKakaoAddress?){
-        _searchAddressResponse.value = set
-    }
 
     fun setUserChoiceLocation(set: String) {
         _userChoiceLocation.value = set
@@ -39,6 +38,7 @@ class LocationViewModel @Inject constructor(
 
     fun saveLocationInDataStore() = viewModelScope.launch {
         dataStore.setLocation(_userChoiceLocation.value.toString())
+        viewEvent("SAVE_SUCCESS")
     }
 
     fun setViewEventNull() = viewEvent("NULL")
@@ -64,6 +64,7 @@ class LocationViewModel @Inject constructor(
                     try {
                         _searchAddressResponse.value = response
                         viewEvent("SUCCESS")
+                        //_searchAddressResponse.postValue() = response
                     } catch (e: Exception) {
                         viewEvent("ERROR")
                     }

@@ -48,7 +48,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
+        // observeViewModel()
     }
 
 /*    private fun initViewModel() {
@@ -67,18 +67,20 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
 
     private fun observeViewModel() {
         viewModel.viewEvent.observe(requireActivity(), {
-            it.getContentIfNotHandled()?.let { event ->
+            it.peekContent().let { event ->
                 Log.d("TAG", "Event : $event")
                 when (event) {
                     "SUCCESS" -> {
                         Log.d("TAG", "SUCCESS")
-                        this@LocationFragment.findNavController().navigate(
+                        /*this@LocationFragment.findNavController().navigate(
                             LocationFragmentDirections.actionLocationFragmentToLocationSelectFragment(
                                 "location"
                             )
-                        )
+                        )*/
+                        this.findNavController()
+                            .navigate(R.id.action_locationFragment_to_locationSelectFragment)
                         //startLocationSelectFragment()
-                        //viewModel.setViewEventNull()
+                        viewModel.setViewEventNull()
                     }
                     "ERROR" -> shortShowToast("오류가 발생했습니다")
                 }
@@ -86,10 +88,15 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         })
 
 
- /*       viewModel.userChoiceLocation.observe(requireActivity(), Observer {
-            Log.d("TAG", "사용자가 선택한 위치 : $it")
-            viewModel.saveLocationInDataStore()
-        })*/
+        /*       viewModel.viewEvent.observe(requireActivity(), {
+                   Log.d("TAG", "Event : $it")
+               })*/
+
+
+        /*       viewModel.userChoiceLocation.observe(requireActivity(), Observer {
+                   Log.d("TAG", "사용자가 선택한 위치 : $it")
+                   viewModel.saveLocationInDataStore()
+               })*/
     }
 
 /*    private fun startLocationSelectFragment() {
@@ -107,18 +114,14 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
     }*/
 
     fun clickAddressSearchBtn(view: View) {
-        if (!TextUtils.isEmpty(binding.query.text.toString())) viewModel.searchAddress(
-            KEY,
-            "similar",
-            1,
-            10,
-            binding.query.text.toString()
-        ) else shortShowToast("주소를 입력해 주세요")
-  /*      this@LocationFragment.findNavController().navigate(
-            LocationFragmentDirections.actionLocationFragmentToLocationSelectFragment(
-                "location"
+        if (!TextUtils.isEmpty(binding.query.text.toString())) this@LocationFragment.findNavController()
+            .navigate(
+                LocationFragmentDirections.actionLocationFragmentToLocationSelectFragment(
+                    binding.query.text.toString()
+                )
             )
-        )*/
+        else shortShowToast("주소를 입력해 주세요")
+
 //        this.findNavController().navigate(LocationFragmentDirections.actionLocationFragmentToLocationSelectFragment("location"))
 
     }

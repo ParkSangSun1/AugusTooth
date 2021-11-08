@@ -13,13 +13,15 @@
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/drawable/zoom_txt_background.xml" value="0.24270833333333333" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/activity_splash.xml" value="0.21693840579710144" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_a_test.xml" value="0.22604166666666667" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_b_test.xml" value="0.22604166666666667" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_camera.xml" value="0.176" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_camera_auto.xml" value="0.2" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_image_analysis.xml" value="0.2" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_location.xml" value="0.264" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_location_dialog.xml" value="0.264" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_location_result.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_location_select.xml" value="0.1351931330472103" />
+        <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_location_select.xml" value="0.176" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_open_source_license.xml" value="0.176" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_setting.xml" value="0.264" />
         <entry key="..\:/Users/apple/AndroidStudioProjects/AugusTooth/presentation/src/main/res/layout/fragment_splash.xml" value="0.136" />
