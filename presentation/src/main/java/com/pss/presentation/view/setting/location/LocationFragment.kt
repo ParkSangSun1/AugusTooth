@@ -43,6 +43,14 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
 
     override fun init() {
         binding.fragment = this
+        initReadDataStore()
+    }
+
+    private fun initReadDataStore() = CoroutineScope(Dispatchers.Main).launch {
+        viewModel.readLocationInDataStore().apply {
+            Log.d("TAG","readLocationInDataSTore Value : $this")
+            if (this != DEFAULT_LOCATION) binding.query.setText(this.toString())
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

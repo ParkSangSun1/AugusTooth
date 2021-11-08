@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.pss.domain.model.kakao.response.DomainKakaoAddress
 import com.pss.domain.usecase.SearchAddressUseCase
 import com.pss.presentation.base.BaseViewModel
+import com.pss.presentation.widget.utils.DataStore
 import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
 import com.pss.presentation.widget.utils.DataStoreModule
 import com.pss.presentation.widget.utils.Event
@@ -38,6 +39,14 @@ class LocationViewModel @Inject constructor(
         _userChoiceLocation.value = null
         _searchAddressResponse.value = null
         //viewEvent("NULL")
+    }
+
+    suspend fun readLocationInDataStore() : String {
+        var location : String = DataStore.DEFAULT_LOCATION
+        viewModelScope.launch {
+            location =  dataStore.readLocation.first()
+        }
+        return location
     }
 
     fun saveLocationInDataStore(location : String) = viewModelScope.launch {
