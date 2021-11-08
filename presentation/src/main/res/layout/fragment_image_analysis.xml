@@ -111,6 +111,7 @@
                     android:textSize="25sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/search_dentist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="주변 치과 찾아보기"

@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.pss.presentation.base.BaseFragment
 import com.pss.presentation.viewmodel.ImageAnalysisViewModel
+import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
 import kotlinx.coroutines.*
 import org.pytorch.*
 
@@ -52,10 +53,13 @@ class ImageAnalysisFragment :
     fun seeNearbyDentist(view: View){
         CoroutineScope(Dispatchers.IO).launch {
             val location = viewModel.readLocationInDataStore()
-            val intent = Intent()
-            intent.action = Intent.ACTION_VIEW
-            intent.data = Uri.parse("geo:0,0?q=${location}치과")
-            startActivity(intent)
+            if (location == DEFAULT_LOCATION) shortShowToast("먼저 위치를 설정해 주세요")
+            else {
+                val intent = Intent()
+                intent.action = Intent.ACTION_VIEW
+                intent.data = Uri.parse("geo:0,0?q=${location}치과")
+                startActivity(intent)
+            }
         }
     }
 
@@ -65,7 +69,10 @@ class ImageAnalysisFragment :
                 binding.imageView.visibility = View.GONE
                 binding.layout.visibility = View.VISIBLE
                 binding.resultTxt.text = when (viewModel.analysisImageResponse.value) {
-                    0 -> "교정이 필요하지 않습니다"
+                    0 -> {
+                        binding.searchDentist.visibility = View.GONE
+                        "교정이 필요하지 않습니다"
+                    }
                     1 -> "교정이 필요합니다"
                     else -> "분석에 실패했습니다"
                 }
