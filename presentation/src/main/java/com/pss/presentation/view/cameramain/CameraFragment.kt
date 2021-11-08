@@ -57,16 +57,8 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         binding.listeners = Listeners(this, viewModel)
         initColor()
         initCamera()
-        startLocationCheck()
         observeViewModel()
         startCamera()
-    }
-
-    private fun startLocationCheck(){
-        viewModel.readLocationInDataStore().apply {
-            if (this == DEFAULT_LOCATION) longShowToast("위에 위치 아이콘 또는 설정에서 위치를 설정해 주세요")
-            else shortShowToast("현재 설정된 위치는 $this 입니다")
-        }
     }
 
     private fun initColor() {
