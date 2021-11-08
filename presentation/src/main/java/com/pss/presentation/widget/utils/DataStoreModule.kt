@@ -26,7 +26,6 @@ class DataStoreModule @Inject constructor(@ApplicationContext private val contex
         val dataStoreLocation = stringPreferencesKey(PREFERENCE_LOCATION)
     }
 
-    //private val intKey = intPreferencesKey("key_name") // int 저장 키값
     private val dataStore: DataStore<Preferences> =
         context.dataStore
 

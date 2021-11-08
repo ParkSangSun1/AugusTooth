@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.pss.presentation.widget.utils.Event
 
 open class BaseViewModel : ViewModel() {
-
     private val _viewEvent = MutableLiveData<Event<Any>>()
     val viewEvent: LiveData<Event<Any>>
         get() = _viewEvent
@@ -14,5 +13,4 @@ open class BaseViewModel : ViewModel() {
     fun viewEvent(content: Any) {
         _viewEvent.value = Event(content)
     }
-
 }

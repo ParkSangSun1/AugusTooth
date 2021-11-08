@@ -43,17 +43,13 @@ class ImageAnalysisFragment :
         mutableBitmap = args.imageBitmap.copy(Bitmap.Config.RGBA_F16, true)
     }
 
-    private suspend fun loadingModule() {
-        module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))
-
-    }
+    private suspend fun loadingModule() {module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))}
 
     fun backBtn(view: View) {
         this.findNavController().popBackStack()
     }
 
     fun seeNearbyDentist(view: View){
-       // startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.co.kr/maps/place/광주광역시 남구 월산동 치과")))
         CoroutineScope(Dispatchers.IO).launch {
             val location = viewModel.readLocationInDataStore()
             val intent = Intent()
@@ -61,7 +57,6 @@ class ImageAnalysisFragment :
             intent.data = Uri.parse("geo:0,0?q=${location} 치과")
             startActivity(intent)
         }
-
     }
 
     private fun observeViewModel() {
@@ -99,7 +94,6 @@ class ImageAnalysisFragment :
             } catch (e: Exception) {
                 Log.d("TAG", "imageAnalysisError : $e")
             }
-
         }
     }
 }

@@ -24,6 +24,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private fun initViewModel(){
         viewModel.setCameraFlashLight(false)
     }
-
-
 }

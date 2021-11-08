@@ -40,14 +40,12 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_camera) {
-
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private var lensFacing = CameraSelector.LENS_FACING_BACK
     private val TAG = "로그"
     private val OPEN_GALLERY = 1
-    private var camera: Camera? = null
     private val viewModel by activityViewModels<CameraMainViewModel>()
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
 
@@ -99,7 +97,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     }
 
     private fun takePhoto() {
-
         checkFlashLightState()
 
         imageCapture = imageCapture ?: return
@@ -131,7 +128,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                 }
             })
     }
-
 
     //sdk < 28 = false, sdk >= 28 = true
     //bitmap으로 uri변환
@@ -221,7 +217,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
 
             override fun onStopTrackingTouch(seekBar: RubberSeekBar) {
                 binding.zoomTxt.visibility = View.VISIBLE
-
             }
         })
     }
@@ -239,12 +234,10 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         cameraExecutor.shutdown()
     }
 
-
     private fun startLocationSettingFragment() {
         shortShowToast("해당 기능은 사용할 수 없습니다")
         //this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
     }
-
 
     //갤러리에서 사진 선택
     @RequiresApi(Build.VERSION_CODES.P)
@@ -275,5 +268,4 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     }
 
     private fun analysisNavController(bitmap: Bitmap) = this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
-
 }

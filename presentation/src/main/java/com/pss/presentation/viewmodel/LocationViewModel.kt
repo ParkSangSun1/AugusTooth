@@ -37,8 +37,6 @@ class LocationViewModel @Inject constructor(
         viewEvent("SAVE_SUCCESS")
     }
 
-    fun setViewEventNull() = viewEvent("NULL")
-
     fun searchAddress(
         Authorization: String,
         analyze_type: String,
