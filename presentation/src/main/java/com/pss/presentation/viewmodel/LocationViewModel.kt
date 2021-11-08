@@ -32,24 +32,12 @@ class LocationViewModel @Inject constructor(
     private val _userChoiceLocation = MutableLiveData<String>()
 
 
-    fun setUserChoiceLocation(set: String) {
-        _userChoiceLocation.value = set
-    }
-
-    fun saveLocationInDataStore() = viewModelScope.launch {
-        dataStore.setLocation(_userChoiceLocation.value.toString())
+    fun saveLocationInDataStore(location : String) = viewModelScope.launch {
+        dataStore.setLocation(location)
         viewEvent("SAVE_SUCCESS")
     }
 
     fun setViewEventNull() = viewEvent("NULL")
-
-    suspend fun readLocationInDataStore() : String {
-        var location : String = DEFAULT_LOCATION
-       // viewModelScope.launch {
-           location =  dataStore.readLocation.first()
-       // }
-        return location
-    }
 
     fun searchAddress(
         Authorization: String,
@@ -64,7 +52,6 @@ class LocationViewModel @Inject constructor(
                     try {
                         _searchAddressResponse.value = response
                         viewEvent("SUCCESS")
-                        //_searchAddressResponse.postValue() = response
                     } catch (e: Exception) {
                         viewEvent("ERROR")
                     }

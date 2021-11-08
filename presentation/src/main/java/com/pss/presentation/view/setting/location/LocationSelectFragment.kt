@@ -15,6 +15,10 @@ import com.pss.presentation.databinding.FragmentLocationSelectBinding
 import com.pss.presentation.view.imageanalysis.ImageAnalysisFragmentArgs
 import com.pss.presentation.viewmodel.LocationViewModel
 import com.pss.presentation.widget.utils.ApiUrl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class LocationSelectFragment :
     BaseFragment<FragmentLocationSelectBinding>(R.layout.fragment_location_select) {
@@ -64,7 +68,9 @@ class LocationSelectFragment :
     }
 
     fun clickChoiceBtn(view: View) {
-        viewModel.saveLocationInDataStore()
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.saveLocationInDataStore(binding.userLocation.text.toString())
+        }
     }
 
     fun clickNotChoiceBtn(view: View) {
