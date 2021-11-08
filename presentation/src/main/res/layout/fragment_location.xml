@@ -142,6 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/location_margin"
                 android:layout_marginTop="10dp"
+                android:onClick="@{fragment::searchGpsAddressClick}"
                 android:layout_marginEnd="@dimen/location_margin"
                 android:background="@drawable/location_btn"
                 android:fontFamily="@font/spoqahansansneo_bold"

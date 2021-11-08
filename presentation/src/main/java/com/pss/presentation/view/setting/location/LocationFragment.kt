@@ -50,6 +50,8 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         observeViewModel()
     }
 
+    fun searchGpsAddressClick(view: View) = shortShowToast("해당 기능은 아직 비활성화 상태입니다")
+
     private fun observeViewModel() {
         viewModel.searchAddressResult.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess) {

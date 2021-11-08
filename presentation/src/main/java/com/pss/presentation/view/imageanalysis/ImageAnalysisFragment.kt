@@ -54,7 +54,7 @@ class ImageAnalysisFragment :
             val location = viewModel.readLocationInDataStore()
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW
-            intent.data = Uri.parse("geo:0,0?q=${location} 치과")
+            intent.data = Uri.parse("geo:0,0?q=${location}치과")
             startActivity(intent)
         }
     }
