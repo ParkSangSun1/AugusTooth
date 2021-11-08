@@ -79,9 +79,9 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
             checkFlashLightState(it)
         })
 
-        viewModel.viewEvent.observe(requireActivity(),{
+        viewModel.viewEvent.observe(requireActivity(), {
             it.getContentIfNotHandled()?.let { event ->
-                when(event){
+                when (event) {
                     EVENT_START_ANALYSIS -> takePhoto()
                     EVENT_START_GALLERY -> startGallery()
                     EVENT_CHANGE_CAMERA -> changeCamera()
@@ -146,8 +146,9 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     }
 
     private fun changeCamera() {
-        lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) CameraSelector.LENS_FACING_BACK
-        else CameraSelector.LENS_FACING_FRONT
+        lensFacing =
+            if (CameraSelector.LENS_FACING_FRONT == lensFacing) CameraSelector.LENS_FACING_BACK
+            else CameraSelector.LENS_FACING_FRONT
         startCamera()
     }
 
@@ -200,7 +201,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     }
 
     //seekbar 줌 리스너 추가
-    private fun initZoomListener(cameraControl: Camera){
+    private fun initZoomListener(cameraControl: Camera) {
         binding.zoomSeekBar.setOnRubberSeekBarChangeListener(object :
             RubberSeekBar.OnRubberSeekBarChangeListener {
             override fun onProgressChanged(
@@ -234,10 +235,8 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         cameraExecutor.shutdown()
     }
 
-    private fun startLocationSettingFragment() {
-        shortShowToast("해당 기능은 사용할 수 없습니다")
-        //this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
-    }
+    private fun startLocationSettingFragment() =
+        this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
 
     //갤러리에서 사진 선택
     @RequiresApi(Build.VERSION_CODES.P)
@@ -267,5 +266,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         }
     }
 
-    private fun analysisNavController(bitmap: Bitmap) = this.findNavController().navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
+    private fun analysisNavController(bitmap: Bitmap) = this.findNavController()
+        .navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
 }

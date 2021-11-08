@@ -27,15 +27,25 @@ class LocationViewModel @Inject constructor(
     val searchAddressResponse: LiveData<DomainKakaoAddress?> get() = _searchAddressResponse
     private val _searchAddressResponse = SingleLiveEvent<DomainKakaoAddress?>()
 
-    //사용자가 최종적으로 선택한(Dialog에서) 위치
-    val userChoiceLocation: LiveData<String> get() = _userChoiceLocation
-    private val _userChoiceLocation = MutableLiveData<String>()
+    val searchAddressResult: LiveData<Boolean> get() = _searchAddressResult
+    private val _searchAddressResult =  SingleLiveEvent<Boolean>()
 
+    //사용자가 최종적으로 선택한(Dialog에서) 위치
+    val userChoiceLocation: LiveData<String?> get() = _userChoiceLocation
+    private val _userChoiceLocation = MutableLiveData<String?>()
+
+    fun setInitViewModel(){
+        _userChoiceLocation.value = null
+        _searchAddressResponse.value = null
+        //viewEvent("NULL")
+    }
 
     fun saveLocationInDataStore(location : String) = viewModelScope.launch {
         dataStore.setLocation(location)
-        viewEvent("SAVE_SUCCESS")
+
     }
+
+    fun setViewEventNull() = viewEvent("NULL")
 
     fun searchAddress(
         Authorization: String,
@@ -44,13 +54,17 @@ class LocationViewModel @Inject constructor(
         size: Int,
         query: String
     ) {
+        Log.d("TAG","로그 searchAddress")
         viewModelScope.launch {
             addressUseCase.execute(Authorization, analyze_type, page, size, query)
                 .let { response ->
                     try {
+                        Log.d("TAG","viewModel addressUseCase success")
                         _searchAddressResponse.value = response
-                        viewEvent("SUCCESS")
+                        _searchAddressResult.postValue(true)
                     } catch (e: Exception) {
+                        Log.d("TAG","viewModel addressUseCase error")
+                        _searchAddressResult.postValue(false)
                         viewEvent("ERROR")
                     }
                 }

@@ -25,51 +25,20 @@ class LocationSelectFragment :
     private val args by navArgs<LocationSelectFragmentArgs>()
     private val viewModel by activityViewModels<LocationViewModel>()
 
+
     override fun init() {
         binding.fragment = this
-        searchLocation()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
-    }
-
-    private fun observeViewModel() {
-        viewModel.viewEvent.observe(requireActivity(), {
-            it.peekContent().let { event ->
-                Log.d("TAG", "Event : $event")
-                when (event) {
-                    "SUCCESS" -> {
-                        initText()
-                    }
-                    "ERROR" -> shortShowToast("오류가 발생했습니다")
-                    "SAVE_SUCCESS" -> this@LocationSelectFragment.findNavController().popBackStack()
-                }
-            }
-        })
-    }
-
-    private fun searchLocation() {
-        viewModel.searchAddress(
-            ApiUrl.KEY,
-            "similar",
-            1,
-            10,
-            args.location
-        )
+        initText()
     }
 
     private fun initText() {
-        if (viewModel.searchAddressResponse.value?.meta?.pageable_count != 0) viewModel.searchAddressResponse.value!!.documents[0].address.apply {
-            binding.userLocation.text =
-                "$region_1depth_name $region_2depth_name $region_3depth_name"
-        }
+        binding.userLocation.text = args.location
     }
 
     fun clickChoiceBtn(view: View) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             viewModel.saveLocationInDataStore(binding.userLocation.text.toString())
+            this@LocationSelectFragment.findNavController().popBackStack()
         }
     }
 
