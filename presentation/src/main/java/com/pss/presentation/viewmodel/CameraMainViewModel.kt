@@ -42,11 +42,9 @@ class CameraMainViewModel @Inject constructor(
 
     fun startLocationFragment() = viewEvent(EVENT_START_LOCATION_SETTING)
 
-    fun readLocationInDataStore() : String {
-        var location : String = DataStore.DEFAULT_LOCATION
-        viewModelScope.launch {
+    suspend fun readLocationInDataStore() : String {
+            var location : String = DataStore.DEFAULT_LOCATION
             location =  dataStore.readLocation.first()
-        }
-        return location
+            return location
     }
 }
