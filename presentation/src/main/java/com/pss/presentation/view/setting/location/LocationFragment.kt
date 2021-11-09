@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
-import android.location.LocationManager
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -29,12 +27,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import com.pss.presentation.widget.utils.LocationHelper
 import java.io.IOException
 import java.util.*
+import android.widget.Toast
+import java.lang.IllegalArgumentException
 
 
 class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment_location) {
     private val viewModel by activityViewModels<LocationViewModel>()
+    var mLocationManager: LocationManager? = null
+    var mLocationListener: LocationListener? = null
+    var mContext = this
 
     //뒤로가기 클릭
     fun backBtn(view: View) {
@@ -48,7 +55,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
 
     private fun initReadDataStore() = CoroutineScope(Dispatchers.Main).launch {
         viewModel.readLocationInDataStore().apply {
-            Log.d("TAG","readLocationInDataSTore Value : $this")
+            Log.d("TAG", "readLocationInDataSTore Value : $this")
             if (this != DEFAULT_LOCATION) binding.query.setText(this.toString())
         }
     }
@@ -58,7 +65,9 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         observeViewModel()
     }
 
-    fun searchGpsAddressClick(view: View) = shortShowToast("해당 기능은 아직 비활성화 상태입니다")
+    fun searchGpsAddressClick(view: View) {
+        getLocation()
+    }
 
     private fun observeViewModel() {
         viewModel.searchAddressResult.observe(viewLifecycleOwner) { isSuccess ->
@@ -77,10 +86,47 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         }
     }
 
+    private fun getLocation() {
+        LocationHelper().startListeningUserLocation(
+            requireContext(),
+            object : LocationHelper.MyLocationListener {
+                override fun onLocationChanged(location: Location) {
+                    // Here you got user location :)
+                    Log.d(
+                        "TAG",
+                        "LOCATION : " + "현재 위치 - ${
+                            getCurrentAddress(
+                                location.latitude,
+                                location.longitude
+                            )
+                        }" + location.latitude + "," + location.longitude
+                    )
+                }
+            })
+    }
+
     fun clickAddressSearchBtn(view: View) {
         if (!TextUtils.isEmpty(binding.query.text.toString()))
             searchLocation()
         else shortShowToast("주소를 입력해 주세요")
+    }
+
+    fun getCurrentAddress(latitude: Double, longitude: Double): String {
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+        val addresses: List<Address>? = try {
+            geocoder.getFromLocation(
+                latitude,
+                longitude,
+                7
+            )
+        } catch (ioException: IOException) {
+            return "GPS를 키거나 또는 네트워크를 확인해 주세요"
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            return "잘못된 GPS 좌표입니다. 주소 검색을 이용해 주세요"
+        }
+        if (addresses == null || addresses.isEmpty()) return "주소가 발견되지 않습니다. 다시 시도하거나 주소 검색을 이용해 주세요"
+        val address = addresses[0]
+        return address.getAddressLine(0).toString()
     }
 
     private fun searchLocation() {
