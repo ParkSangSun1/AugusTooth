@@ -11,10 +11,13 @@ https://play.google.com/store/apps/details?id=com.pss.augustooth
 - **Jetpack camerax**
 - **Retrofit2, okhttp3**
 - **Pytorch mobile**
-- **Navigation component**
+- **DataBinding**
 - **Dagger hilt**
 - **Clean architecture**
-- **Mvvm design pattern**
+- **MVVM design pattern**
+- **Coroutine**
+- **Datan store**
+- **AAC(Navigation component, ViewModel, Livedata and so on)**
 <br><br>
 ## Other than that
 #### 오류나 버그가 발견되면 이슈 넣어주시면 감사하겠습니다
