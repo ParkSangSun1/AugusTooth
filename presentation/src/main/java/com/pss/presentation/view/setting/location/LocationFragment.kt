@@ -116,12 +116,18 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
                                     )
                                 }" + location.latitude + "," + location.longitude
                             )
+                            var mLocation = ""
+                            val locationArray = getCurrentAddress(
+                                location.latitude,
+                                location.longitude
+                            ).toString().split(" ")
+                            for (num in 1..3) {
+                                mLocation = mLocation.plus("${locationArray[num]} ")
+                            }
                             viewModel.setSearchGpsAddressResponse(
-                                getCurrentAddress(
-                                    location.latitude,
-                                    location.longitude
-                                )
+                                mLocation
                             )
+
                         } catch (e: Exception) {
                             viewModel.setSearchGpsAddressResponse("ERROR")
                         }
