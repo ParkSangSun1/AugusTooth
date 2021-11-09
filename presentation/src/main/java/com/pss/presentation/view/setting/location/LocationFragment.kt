@@ -93,48 +93,58 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
                 viewModel.saveLocationInDataStore(response)
                 shortShowToast("위치가 저장되었습니다")
             }
-            binding.progressBar.isEnabled = true
-            binding.progressBar.visibility = View.INVISIBLE
+            searchGpsEnd()
         }
     }
 
+    private fun searchGpsEnd(){
+        binding.progressBar.isEnabled = true
+        binding.progressBar.visibility = View.INVISIBLE
+    }
+
     private fun getLocation() {
-        binding.progressBar.visibility = View.VISIBLE
-        binding.progressBar.isEnabled = false
-        CoroutineScope(Dispatchers.Main).launch {
-            LocationHelper().startListeningUserLocation(
-                requireContext(),
-                object : LocationHelper.MyLocationListener {
-                    override fun onLocationChanged(location: Location) {
-                        try {
-                            Log.d(
-                                "TAG",
-                                "LOCATION : " + "현재 위치 - ${
-                                    getCurrentAddress(
-                                        location.latitude,
-                                        location.longitude
-                                    )
-                                }" + location.latitude + "," + location.longitude
-                            )
-                            var mLocation = ""
-                            val locationArray = getCurrentAddress(
-                                location.latitude,
-                                location.longitude
-                            ).toString().split(" ")
-                            for (num in 1..3) {
-                                mLocation = mLocation.plus("${locationArray[num]} ")
+        val mLocationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        Log.d("TAG","Gps 연결 상태 : ${mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)}")
+        if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+
+            binding.progressBar.visibility = View.VISIBLE
+            binding.progressBar.isEnabled = false
+
+            CoroutineScope(Dispatchers.Main).launch {
+                LocationHelper().startListeningUserLocation(
+                    requireContext(),
+                    object : LocationHelper.MyLocationListener {
+                        override fun onLocationChanged(location: Location) {
+                            try {
+                                Log.d(
+                                    "TAG",
+                                    "LOCATION : " + "현재 위치 - ${
+                                        getCurrentAddress(
+                                            location.latitude,
+                                            location.longitude
+                                        )
+                                    }" + location.latitude + "," + location.longitude
+                                )
+                                var mLocation = ""
+                                val locationArray = getCurrentAddress(
+                                    location.latitude,
+                                    location.longitude
+                                ).toString().split(" ")
+                                for (num in 1..3) {
+                                    mLocation = mLocation.plus("${locationArray[num]} ")
+                                }
+                                viewModel.setSearchGpsAddressResponse(
+                                    mLocation
+                                )
+
+                            } catch (e: Exception) {
+                                searchGpsEnd()
+                                viewModel.setSearchGpsAddressResponse("ERROR")
                             }
-                            viewModel.setSearchGpsAddressResponse(
-                                mLocation
-                            )
-
-                        } catch (e: Exception) {
-                            viewModel.setSearchGpsAddressResponse("ERROR")
                         }
-                    }
-                })
-        }
-
+                    })
+            }
+        }else shortShowToast("GPS 기능을 켜주세요")
     }
 
     fun clickAddressSearchBtn(view: View) {
