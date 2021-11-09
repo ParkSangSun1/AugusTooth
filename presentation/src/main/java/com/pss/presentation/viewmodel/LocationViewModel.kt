@@ -25,21 +25,18 @@ class LocationViewModel @Inject constructor(
     private val dataStore: DataStoreModule
 ) : BaseViewModel() {
 
+    //kakao address api로 위치를 검색한 결과 값
     val searchAddressResponse: LiveData<DomainKakaoAddress?> get() = _searchAddressResponse
     private val _searchAddressResponse = SingleLiveEvent<DomainKakaoAddress?>()
 
+    //kakao address api로 위치를 검색한 성공여부
     val searchAddressResult: LiveData<Boolean> get() = _searchAddressResult
     private val _searchAddressResult =  SingleLiveEvent<Boolean>()
 
-    //사용자가 최종적으로 선택한(Dialog에서) 위치
-    val userChoiceLocation: LiveData<String?> get() = _userChoiceLocation
-    private val _userChoiceLocation = MutableLiveData<String?>()
+    //Gps로 위치를 검색할때
+    val searchGpsAddressResponse: LiveData<String> get() = _searchGpsAddressResponse
+    private val _searchGpsAddressResponse =  SingleLiveEvent<String>()
 
-    fun setInitViewModel(){
-        _userChoiceLocation.value = null
-        _searchAddressResponse.value = null
-        //viewEvent("NULL")
-    }
 
     suspend fun readLocationInDataStore() : String {
         var location : String = DataStore.DEFAULT_LOCATION
@@ -49,12 +46,11 @@ class LocationViewModel @Inject constructor(
         return location
     }
 
+    fun setSearchGpsAddressResponse(set : String) = _searchGpsAddressResponse.postValue(set)
+
     fun saveLocationInDataStore(location : String) = viewModelScope.launch {
         dataStore.setLocation(location)
-
     }
-
-    fun setViewEventNull() = viewEvent("NULL")
 
     fun searchAddress(
         Authorization: String,

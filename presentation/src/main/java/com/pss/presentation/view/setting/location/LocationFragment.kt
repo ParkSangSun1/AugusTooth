@@ -84,25 +84,51 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
                 return@observe
             } else shortShowToast("주소 검색에 실패했습니다")
         }
+
+        viewModel.searchGpsAddressResponse.observe(viewLifecycleOwner) { response ->
+            Log.d("TAG", "GPS RESPONSE : $response")
+            if (response == "ERROR") shortShowToast("주소를 검색하는데 오류가 발생했습니다")
+            else {
+                binding.query.setText(response)
+                viewModel.saveLocationInDataStore(response)
+                shortShowToast("위치가 저장되었습니다")
+            }
+            binding.progressBar.isEnabled = true
+            binding.progressBar.visibility = View.INVISIBLE
+        }
     }
 
     private fun getLocation() {
-        LocationHelper().startListeningUserLocation(
-            requireContext(),
-            object : LocationHelper.MyLocationListener {
-                override fun onLocationChanged(location: Location) {
-                    // Here you got user location :)
-                    Log.d(
-                        "TAG",
-                        "LOCATION : " + "현재 위치 - ${
-                            getCurrentAddress(
-                                location.latitude,
-                                location.longitude
+        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.isEnabled = false
+        CoroutineScope(Dispatchers.Main).launch {
+            LocationHelper().startListeningUserLocation(
+                requireContext(),
+                object : LocationHelper.MyLocationListener {
+                    override fun onLocationChanged(location: Location) {
+                        try {
+                            Log.d(
+                                "TAG",
+                                "LOCATION : " + "현재 위치 - ${
+                                    getCurrentAddress(
+                                        location.latitude,
+                                        location.longitude
+                                    )
+                                }" + location.latitude + "," + location.longitude
                             )
-                        }" + location.latitude + "," + location.longitude
-                    )
-                }
-            })
+                            viewModel.setSearchGpsAddressResponse(
+                                getCurrentAddress(
+                                    location.latitude,
+                                    location.longitude
+                                )
+                            )
+                        } catch (e: Exception) {
+                            viewModel.setSearchGpsAddressResponse("ERROR")
+                        }
+                    }
+                })
+        }
+
     }
 
     fun clickAddressSearchBtn(view: View) {
