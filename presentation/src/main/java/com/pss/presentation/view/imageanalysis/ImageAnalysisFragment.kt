@@ -44,16 +44,21 @@ class ImageAnalysisFragment :
         mutableBitmap = args.imageBitmap.copy(Bitmap.Config.RGBA_F16, true)
     }
 
-    private suspend fun loadingModule() {module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))}
+    private suspend fun loadingModule() {
+        module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))
+    }
 
     fun backBtn(view: View) {
         this.findNavController().popBackStack()
     }
 
-    fun seeNearbyDentist(view: View){
+    fun seeNearbyDentist(view: View) {
         CoroutineScope(Dispatchers.IO).launch {
             val location = viewModel.readLocationInDataStore()
-            if (location == DEFAULT_LOCATION) shortShowToast("먼저 위치를 설정해 주세요")
+            Log.d("TAG", "seeNearbyDentist location : $location")
+            if (location == DEFAULT_LOCATION) withContext(Dispatchers.Main) {
+                shortShowToast("먼저 위치를 설정해 주세요")
+            }
             else {
                 val intent = Intent()
                 intent.action = Intent.ACTION_VIEW
