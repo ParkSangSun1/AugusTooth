@@ -13,7 +13,7 @@ https://play.google.com/store/apps/details?id=com.pss.augustooth
 - **Clean architecture**
 - **MVVM design pattern**
 - **Coroutine/ Flow**
-- **Datan store**
+- **Data store**
 - **AAC(Navigation component, ViewModel, Livedata and so on)**
 <br><br>
 ## App structure
