@@ -28,9 +28,6 @@ class ImageAnalysisViewModel @Inject constructor(
     private var MY_TORCHVISION_NORM_MEAN_RGB = floatArrayOf(0f, 0f, 0f)
     private var MY_TORCHVISION_NORM_STD_RGB = floatArrayOf(1f, 1f, 1f)
 
-    init {
-        _analysisImageResponse.value = null
-    }
 
     fun setImageBitmap(image: Bitmap) {
         _imageBitmap.value = image
