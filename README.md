@@ -1,5 +1,7 @@
 # AugusTooth
-🦷 It self-diagnoses teeth using artificial intelligence(AI)
+**🦷 It self-diagnoses teeth using artificial intelligence(AI)** 
+##### ![AugusTooth 그룹](https://user-images.githubusercontent.com/67040465/158754741-d935c1b3-631c-4fd2-be27-7bce2f067e82.jpg)
+
 <br><br>
 ## Google PlayStore
 https://play.google.com/store/apps/details?id=com.pss.augustooth
