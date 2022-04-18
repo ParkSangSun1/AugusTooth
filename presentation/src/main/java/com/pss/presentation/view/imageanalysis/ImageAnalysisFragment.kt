@@ -34,18 +34,39 @@ class ImageAnalysisFragment :
     private lateinit var mutableBitmap: Bitmap
     private lateinit var job: Job
 
+
     override fun onStart() {
         super.onStart()
         viewModel.setAnalysisImageResponse(null)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    override fun init() {
+        binding.fragment = this
+        longShowToast("사진을 분석하는데 약 1~2분이 걸릴수 있습니다")
+        observeViewModel()
+        job = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                readingImage()
+                loadingModule()
+                viewModel.analysisImage(mutableBitmap, module)
+            } catch (e: Exception) {
+                Log.d("TAG", "imageAnalysisError : $e")
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun readingImage() {
-        mutableBitmap = args.imageBitmap.copy(Bitmap.Config.RGBA_F16, true)
+        withContext(Dispatchers.Default){
+            mutableBitmap = args.imageBitmap.copy(Bitmap.Config.RGBA_F16, true)
+        }
     }
 
     private suspend fun loadingModule() {
-        module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))
+        withContext(Dispatchers.Default) {
+            module = LiteModuleLoader.load(assetFilePath(requireContext(), "model_script.ptl"))
+        }
     }
 
     fun backBtn(view: View) {
@@ -91,21 +112,5 @@ class ImageAnalysisFragment :
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun init() {
-        binding.fragment = this
-        longShowToast("사진을 분석하는데 약 1~2분이 걸릴수 있습니다")
-        observeViewModel()
-        job = CoroutineScope(Dispatchers.IO).launch {
-            try {
-                readingImage()
-                loadingModule()
-                viewModel.analysisImage(mutableBitmap, module)
-            } catch (e: Exception) {
-                Log.d("TAG", "imageAnalysisError : $e")
-            }
-        }
     }
 }
