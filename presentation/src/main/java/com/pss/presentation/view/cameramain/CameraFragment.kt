@@ -6,14 +6,9 @@ import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
@@ -21,7 +16,6 @@ import androidx.camera.core.ImageCapture.FLASH_MODE_OFF
 import androidx.camera.core.ImageCapture.FLASH_MODE_ON
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.jem.rubberpicker.RubberSeekBar
@@ -33,8 +27,6 @@ import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_CHANGE
 import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_START_ANALYSIS
 import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_START_GALLERY
 import com.pss.presentation.viewmodel.CameraMainViewModel.Companion.EVENT_START_LOCATION_SETTING
-import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
-import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,10 +38,9 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private var lensFacing = CameraSelector.LENS_FACING_BACK
-    private val TAG = "로그"
-    private val OPEN_GALLERY = 1
+    private val openGallery = 1
     private val viewModel by activityViewModels<CameraMainViewModel>()
-    private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    private val fileNameFormat = "yyyy-MM-dd-HH-mm-ss-SSS"
 
 
     override fun init() {
@@ -61,10 +52,12 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         startCamera()
     }
 
+    //초기 색 설정
     private fun initColor() {
         binding.backgroundCircle.setColorFilter(Color.parseColor("#F98484"))
     }
 
+    //초기 카메라 설정
     private fun initCamera() {
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -81,7 +74,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
             checkFlashLightState(it)
         })
 
-        viewModel.viewEvent.observe(requireActivity(), {
+        viewModel.viewEvent.observe(requireActivity()) {
             it.getContentIfNotHandled()?.let { event ->
                 when (event) {
                     EVENT_START_ANALYSIS -> takePhoto()
@@ -90,14 +83,16 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                     EVENT_START_LOCATION_SETTING -> startLocationSettingFragment()
                 }
             }
-        })
+        }
     }
 
+    //플래쉬 on/ off
     private fun checkFlashLightState(it: Boolean) {
         if (it) binding.flashlightBtn.setImageResource(R.drawable.flashlight_false)
         else binding.flashlightBtn.setImageResource(R.drawable.flashlight_true)
     }
 
+    //사진 촬영
     private fun takePhoto() {
         checkFlashLightState()
 
@@ -105,7 +100,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         val photoFile = File(
             outputDirectory,
             SimpleDateFormat(
-                FILENAME_FORMAT, Locale.KOREA
+                fileNameFormat, Locale.KOREA
             ).format(System.currentTimeMillis()) + ".jpg"
         )
 
@@ -116,17 +111,17 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                    longShowToast("사진을 촬영하는데 오류가 발생했습니다")
                 }
 
                 @RequiresApi(Build.VERSION_CODES.P)
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val mediaScanIntent: Intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+                    val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
                     val contentUri: Uri = Uri.fromFile(photoFile)
                     mediaScanIntent.data = contentUri
                     activity?.sendBroadcast(mediaScanIntent)
 
-                    analysisNavController(bitmapConversion(contentUri, false))
+                    startImageAnalysisFragment(bitmapConversion(contentUri, false))
                 }
             })
     }
@@ -147,6 +142,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         )
     }
 
+    //전/ 후면 카메라 전환
     private fun changeCamera() {
         lensFacing =
             if (CameraSelector.LENS_FACING_FRONT == lensFacing) CameraSelector.LENS_FACING_BACK
@@ -154,10 +150,11 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         startCamera()
     }
 
+    //갤러리 이동
     private fun startGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.setType("image/*")
-        startActivityForResult(intent, OPEN_GALLERY)
+        startActivityForResult(intent, openGallery)
     }
 
     //카메라 시작
@@ -179,13 +176,13 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
+                    //사진 분석 로그를 찍으려면
+                    /*it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
                         Log.d(TAG, "Average luminosity: $luma")
-                    })
+                    })*/
                 }
 
 
-            //val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
 
             try {
@@ -196,7 +193,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                 initZoomListener(cameraControl)
 
             } catch (exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+                longShowToast("카메라를 실행하는데 오류가 발생했습니다")
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
@@ -237,6 +234,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         cameraExecutor.shutdown()
     }
 
+    //위치 설정 화면으로 이동
     private fun startLocationSettingFragment() =
         this.findNavController().navigate(R.id.action_cameraFragment_to_locationFragment)
 
@@ -244,30 +242,26 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == OPEN_GALLERY) {
+        if (requestCode == openGallery) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 //선택한 이미지의 데이터가 이곳에 저장
-                var currentImageUri = data?.data
+                val currentImageUri = data?.data
 
                 try {
                     currentImageUri?.let {
-                        if (Build.VERSION.SDK_INT < 28) {
-
-                            analysisNavController(bitmapConversion(currentImageUri, false))
-                        } else {
-
-                            analysisNavController(bitmapConversion(currentImageUri, true))
-                        }
+                        if (Build.VERSION.SDK_INT < 28) startImageAnalysisFragment(bitmapConversion(currentImageUri, false))
+                         else startImageAnalysisFragment(bitmapConversion(currentImageUri, true))
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             } else if (resultCode == AppCompatActivity.RESULT_CANCELED) {
-                Log.d("로그", "사진 취소됨")
+                shortShowToast("사진 선택이 취소되었습니다")
             }
         }
     }
 
-    private fun analysisNavController(bitmap: Bitmap) = this.findNavController()
+    //이미지 분석 시작 화면으로 데이터 전송 후 이동
+    private fun startImageAnalysisFragment(bitmap: Bitmap) = this.findNavController()
         .navigate(CameraFragmentDirections.actionCameraFragmentToImageAnalysisFragment(bitmap))
 }
