@@ -1,8 +1,6 @@
 package com.pss.presentation.view.setting.location
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.text.TextUtils
@@ -15,44 +13,33 @@ import com.pss.presentation.R
 import com.pss.presentation.base.BaseFragment
 import com.pss.presentation.databinding.FragmentLocationBinding
 import com.pss.presentation.viewmodel.LocationViewModel
-import com.pss.presentation.widget.utils.ApiUrl.KEY
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.Observer
 import com.pss.presentation.widget.utils.ApiUrl
 import com.pss.presentation.widget.utils.DataStore.DEFAULT_LOCATION
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import androidx.lifecycle.lifecycleScope
 import com.pss.presentation.widget.utils.LocationHelper
 import java.io.IOException
 import java.util.*
-import android.widget.Toast
 import java.lang.IllegalArgumentException
 
 
 class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment_location) {
     private val viewModel by activityViewModels<LocationViewModel>()
-    var mLocationManager: LocationManager? = null
-    var mLocationListener: LocationListener? = null
-    var mContext = this
 
-    //뒤로가기 클릭
-    fun backBtn(view: View) {
-        view.findNavController().popBackStack()
-    }
 
     override fun init() {
         binding.fragment = this
+        observeViewModel()
         initReadDataStore()
     }
 
+    //저장된 주소 가져오기
     private fun initReadDataStore() = CoroutineScope(Dispatchers.Main).launch {
         viewModel.readLocationInDataStore().apply {
             Log.d("TAG", "readLocationInDataSTore Value : $this")
@@ -62,11 +49,24 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
+
     }
 
+    //GPS 사용 위치 검색 클릭 시
     fun searchGpsAddressClick(view: View) {
-        getLocation()
+        getGpsLocation()
+    }
+
+    //뒤로가기 클릭
+    fun backBtn(view: View) {
+        view.findNavController().popBackStack()
+    }
+
+    //주소 검색 버튼 클릭 시
+    fun addressSearchBtnClick(view: View) {
+        if (!TextUtils.isEmpty(binding.query.text.toString()))
+            searchLocation()
+        else shortShowToast("주소를 입력해 주세요")
     }
 
     private fun observeViewModel() {
@@ -97,20 +97,30 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         }
     }
 
+    //GPS 검색 끝
     private fun searchGpsEnd(){
-        binding.progressBar.isEnabled = true
+        binding.gpsBtn.isEnabled = true
         binding.progressBar.visibility = View.INVISIBLE
+        binding.backBtn.isEnabled = true
     }
 
-    private fun getLocation() {
+    //GPS 검색 시작
+    private fun searchGpsStart(){
+        binding.gpsBtn.isEnabled = false
+        binding.progressBar.visibility = View.VISIBLE
+        binding.backBtn.isEnabled = false
+    }
+
+    //GPS 사용
+    private fun getGpsLocation() {
         val mLocationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        Log.d("TAG","Gps 연결 상태 : ${mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)}")
+
+        //GPS 연결되었는지 확인
         if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
 
-            binding.progressBar.visibility = View.VISIBLE
-            binding.progressBar.isEnabled = false
+            searchGpsStart()
 
-            CoroutineScope(Dispatchers.Main).launch {
+            lifecycleScope.launch(Dispatchers.Main) {
                 LocationHelper().startListeningUserLocation(
                     requireContext(),
                     object : LocationHelper.MyLocationListener {
@@ -129,7 +139,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
                                 val locationArray = getCurrentAddress(
                                     location.latitude,
                                     location.longitude
-                                ).toString().split(" ")
+                                ).split(" ")
                                 for (num in 1..3) {
                                     mLocation = mLocation.plus("${locationArray[num]} ")
                                 }
@@ -144,15 +154,10 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
                         }
                     })
             }
-        }else shortShowToast("GPS 기능을 켜주세요")
+        }else shortShowToast("GPS를 켜주세요")
     }
 
-    fun clickAddressSearchBtn(view: View) {
-        if (!TextUtils.isEmpty(binding.query.text.toString()))
-            searchLocation()
-        else shortShowToast("주소를 입력해 주세요")
-    }
-
+    //주소 검색
     fun getCurrentAddress(latitude: Double, longitude: Double): String {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         val addresses: List<Address>? = try {
@@ -171,6 +176,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         return address.getAddressLine(0).toString()
     }
 
+    //주소 검색 api 호출
     private fun searchLocation() {
         viewModel.searchAddress(
             ApiUrl.KEY,

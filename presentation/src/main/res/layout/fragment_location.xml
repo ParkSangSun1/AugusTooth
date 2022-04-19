@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/backBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
@@ -46,9 +46,9 @@
                 android:text="위치"
                 android:textColor="@color/black"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView" />
+                app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+                app:layout_constraintStart_toEndOf="@+id/backBtn"
+                app:layout_constraintTop_toTopOf="@+id/backBtn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,12 +117,12 @@
             </RelativeLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/appCompatButton"
+                android:id="@+id/gpsBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/location_margin"
                 android:layout_marginTop="100dp"
-                android:onClick="@{fragment::clickAddressSearchBtn}"
+                android:onClick="@{fragment::addressSearchBtnClick}"
                 android:elevation="5dp"
                 android:layout_marginEnd="@dimen/location_margin"
                 android:background="@drawable/location_btn"
@@ -154,7 +154,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appCompatButton" />
+                app:layout_constraintTop_toBottomOf="@+id/gpsBtn" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
