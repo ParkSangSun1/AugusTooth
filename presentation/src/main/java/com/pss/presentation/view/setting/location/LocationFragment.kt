@@ -39,11 +39,6 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         initReadDataStore()
     }
 
-    override fun onResume() {
-        super.onResume()
-        initReadDataStore()
-    }
-
     //저장된 주소 가져오기
     private fun initReadDataStore() = CoroutineScope(Dispatchers.Main).launch {
         viewModel.readLocationInDataStore().apply {
