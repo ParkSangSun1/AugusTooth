@@ -93,6 +93,13 @@
             android:name="location"
             app:argType="string"
             android:defaultValue="예기치 않은 오류가 발생했습니다" />
+        <action
+            android:id="@+id/action_locationSelectFragment_to_cameraAutoFragment"
+            app:destination="@id/cameraAutoFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/ATestFragment"

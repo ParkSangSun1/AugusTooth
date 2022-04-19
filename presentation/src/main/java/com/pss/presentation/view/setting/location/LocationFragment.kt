@@ -39,17 +39,17 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(R.layout.fragment
         initReadDataStore()
     }
 
+    override fun onResume() {
+        super.onResume()
+        initReadDataStore()
+    }
+
     //저장된 주소 가져오기
     private fun initReadDataStore() = CoroutineScope(Dispatchers.Main).launch {
         viewModel.readLocationInDataStore().apply {
             Log.d("TAG", "readLocationInDataSTore Value : $this")
-            if (this != DEFAULT_LOCATION) binding.query.setText(this.toString())
+            if (this != DEFAULT_LOCATION) binding.query.setText(this)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     //GPS 사용 위치 검색 클릭 시
