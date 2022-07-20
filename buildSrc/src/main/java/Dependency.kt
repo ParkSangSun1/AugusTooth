@@ -30,17 +30,6 @@ object Google {
     const val MATERIAL = "com.google.android.material:material:1.4.0"
 }
 
-object Test {
-    const val JUNIT = "junit:junit:4.+"
-    const val ANDROID_JUNIT_RUNNER = "AndroidJUnitRunner"
-}
-
-object AndroidTest {
-    const val EXT_JUNIT = "androidx.test.ext:junit:1.1.3"
-    const val TEST_RUNNER = "androidx.test:runner:1.4.0"
-    const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:3.4.0"
-}
-
 object DaggerHilt {
     const val DAGGER_HILT = "com.google.dagger:hilt-android:2.38.1"
     const val DAGGER_HILT_COMPILER = "com.google.dagger:hilt-android-compiler:2.38.1"
@@ -82,4 +71,21 @@ object NavComponent {
 object Library {
     const val SEEKBAR = "com.github.Chrisvin:RubberPicker:v1.5"
     const val LOTTIE = "com.airbnb.android:lottie:3.4.0"
+}
+
+object TestTool {
+    const val EXT_JUNIT = "androidx.test.ext:junit:1.1.3"
+    const val JUNIT = "junit:junit:4.+"
+    const val ANDROID_JUNIT = "androidx.test.ext:junit:1.1.3"
+    const val ANDROID_ESPRESSO = "androidx.test.espresso:espresso-core:3.4.0"
+}
+
+object UI {
+    const val CHRISVIN_RUBBER_PICKER = "com.github.Chrisvin:RubberPicker:v1.5"
+    const val LOTTIE = "com.airbnb.android:lottie:3.4.1"
+}
+
+object Pytorch {
+    const val LITE = "org.pytorch:pytorch_android_lite:1.9.0"
+    const val TORCH_VISION = "org.pytorch:pytorch_android_torchvision:1.9.0"
 }

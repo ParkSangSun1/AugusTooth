@@ -1,64 +1,59 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs.kotlin'
+    id ("com.android.library")
+    id ("kotlin-android")
+    id ("kotlin-kapt")
+    id ("dagger.hilt.android.plugin")
+    id ("androidx.navigation.safeargs.kotlin")
 }
 
 android {
-    compileSdk 31
+    compileSdk = SdkVersions.compileSdk
 
     defaultConfig {
-        configurations.all {
-            resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
-        }
-        minSdk 21
-        targetSdk 31
-        versionCode 8
-        versionName "1.4.2"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
+        minSdk = SdkVersions.minSdk
+        targetSdk = SdkVersions.targetSdk
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildFeatures {
-        dataBinding true
-    }
-
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            isTestCoverageEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+
+    buildFeatures {
+        dataBinding = true
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 }
 
-dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    implementation project(':domain')
-    implementation project(':data')
+
+dependencies {
+    implementation (fileTree (mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
+    implementation (project (":domain"))
+    implementation (project (":data"))
 
     implementation (KTX.CORE)
     implementation (AndroidX.APP_COMPAT)
     implementation (Google.MATERIAL)
     implementation (AndroidX.CONSTRAINT_LAYOUT)
     implementation (AndroidX.LEGACY)
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation (AndroidTest.EXT_JUNIT)
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    androidTestImplementation (TestTool.EXT_JUNIT)
+    androidTestImplementation (TestTool.ANDROID_JUNIT)
+    androidTestImplementation (TestTool.ANDROID_ESPRESSO)
 
     // dagger hilt
     implementation (DaggerHilt.DAGGER_HILT)
@@ -96,7 +91,7 @@ dependencies {
     implementation (CameraX.CAMERA_EXTENSIONS)
 
     //seekbar
-    implementation 'com.github.Chrisvin:RubberPicker:v1.5'
+    implementation (UI.CHRISVIN_RUBBER_PICKER)
 
     //nav component
     implementation (NavComponent.NAVIGATION_FRAGMENT)
@@ -106,11 +101,11 @@ dependencies {
     implementation (NavComponent.NAVIGATION_COMPOSE)
 
     //lottie 애니메이션
-    implementation 'com.airbnb.android:lottie:3.4.1'
+    implementation (UI.LOTTIE)
 
     //pytorch
-    implementation 'org.pytorch:pytorch_android_lite:1.9.0'
-    implementation "org.pytorch:pytorch_android_torchvision:1.9.0"
+    implementation (Pytorch.LITE)
+    implementation (Pytorch.TORCH_VISION)
 
     //datastore
     implementation (AndroidX.DATASTORE)
