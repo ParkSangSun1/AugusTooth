@@ -16,6 +16,7 @@ https://play.google.com/store/apps/details?id=com.pss.augustooth
 - **MVVM design pattern**
 - **Coroutine/ Flow**
 - **Data store**
+- **Kotlin DSL**
 - **AAC(Navigation component, ViewModel, Livedata and so on)**
 <br><br>
 
